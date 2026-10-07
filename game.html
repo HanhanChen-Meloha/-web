@@ -84,4 +84,407 @@
                     </button>
 
                     <!-- 遊戲結束後的上傳分數區塊（預設隱藏） -->
-                    <div id="score-submit-section" class="hidden mb-3 text-left bg-pink-50/70 p-3 rounded-xl border border-pink
+                    <div id="score-submit-section" class="hidden mb-3 text-left">
+                        <label class="block text-xs font-bold text-pink-600 mb-1">輸入你的可愛暱稱：</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="player-name" maxlength="12" placeholder="例如：貪吃小可愛" class="flex-1 border-2 border-pink-300 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-pink-500">
+                            <button id="submit-score-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-1.5 rounded-lg text-xs shadow transition">
+                                登記分數
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 雲端排行榜區塊 -->
+                    <div class="mt-2 border-t-2 border-pink-100 pt-2">
+                        <h3 class="pixel-font text-xs text-amber-600 mb-2">🏆 雲端前 10 名排行榜 🏆</h3>
+                        <div id="leaderboard-list" class="max-h-32 overflow-y-auto text-xs text-gray-700 bg-pink-50/50 rounded-lg p-2 border border-pink-200">
+                            <p class="text-gray-400 text-center py-2">載入排行榜中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Touch Controls -->
+    <footer class="w-full max-w-md mt-4 flex flex-col items-center">
+        <div class="grid grid-cols-3 gap-3 w-full px-2">
+            <button id="btn-left" class="kawaii-btn text-white font-bold py-4 rounded-2xl flex items-center justify-center text-xl shadow-md active:scale-95">
+                ◀ 左轉
+            </button>
+            <button id="btn-pause" class="bg-amber-400 border-3 border-amber-500 shadow-[0_4px_0_#b48100] text-white font-bold py-4 rounded-2xl flex items-center justify-center text-xs pixel-font active:scale-95">
+                暫停
+            </button>
+            <button id="btn-right" class="kawaii-btn text-white font-bold py-4 rounded-2xl flex items-center justify-center text-xl shadow-md active:scale-95">
+                右轉 ▶
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Google Apps Script Web App URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqitUX100l1A1wrokQXiydI6rqCs-tOyk1D5jrRELPwqlqRa75DqboY_cIyXLO2aqmpg/exec';
+
+        // Game Constants & Variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const GRID_SIZE = 20; // 20x20 grid
+        const TILE_SIZE = canvas.width / GRID_SIZE;
+
+        let snake = [];
+        let food = { x: 0, y: 0, type: 'strawberry' };
+        let direction = 'RIGHT'; // 'UP', 'DOWN', 'LEFT', 'RIGHT'
+        let nextDirection = 'RIGHT';
+        let score = 0;
+        let highScore = localStorage.getItem('kawaii_snake_highscore') || 0;
+        let gameInterval = null;
+        let gameSpeed = 130; // ms per frame
+        let gameState = 'START'; // 'START', 'PLAYING', 'PAUSED', 'GAMEOVER'
+
+        // DOM elements
+        const currentScoreEl = document.getElementById('current-score');
+        const highScoreEl = document.getElementById('high-score');
+        const overlay = document.getElementById('overlay');
+        const overlayTitle = document.getElementById('overlay-title');
+        const overlayDesc = document.getElementById('overlay-desc');
+        const overlayBtn = document.getElementById('overlay-btn');
+        const scoreSubmitSection = document.getElementById('score-submit-section');
+        const playerNameInput = document.getElementById('player-name');
+        const submitScoreBtn = document.getElementById('submit-score-btn');
+        const leaderboardList = document.getElementById('leaderboard-list');
+
+        highScoreEl.textContent = highScore;
+
+        // 載入雲端排行榜
+        async function fetchLeaderboard() {
+            leaderboardList.innerHTML = '<p class="text-gray-400 text-center py-2">載入排行榜中...</p>';
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                const result = await response.json();
+                if (result.status === 'success' && result.data) {
+                    renderLeaderboard(result.data);
+                } else {
+                    leaderboardList.innerHTML = '<p class="text-red-400 text-center py-2">暫無排行榜資料</p>';
+                }
+            } catch (err) {
+                console.error("讀取排行榜失敗", err);
+                leaderboardList.innerHTML = '<p class="text-red-400 text-center py-2">無法連線至雲端排行榜</p>';
+            }
+        }
+
+        // 渲染排行榜列表
+        function renderLeaderboard(data) {
+            if (data.length === 0) {
+                leaderboardList.innerHTML = '<p class="text-gray-400 text-center py-2">還沒有人上榜，快來搶頭香！</p>';
+                return;
+            }
+
+            let html = '<table class="w-full text-left border-collapse">';
+            html += '<tr class="border-b border-pink-200 text-pink-600 font-bold"><th class="py-1 px-1">#</th><th class="py-1 px-1">玩家</th><th class="py-1 px-1 text-right">分數</th></tr>';
+            
+            data.forEach((item, index) => {
+                let crown = index === 0 ? '👑 ' : (index === 1 ? '🥈 ' : (index === 2 ? '🥉 ' : ''));
+                html += `<tr class="border-b border-pink-100/50 hover:bg-pink-100/30">
+                    <td class="py-1 px-1 font-bold text-pink-500">${index + 1}</td>
+                    <td class="py-1 px-1 truncate max-w-[100px]">crown{escapeHtml(item.name)}</td>
+                    <td class="py-1 px-1 text-right font-bold text-amber-600">${item.score}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            leaderboardList.innerHTML = html;
+        }
+
+        // 防止 XSS 攻擊的簡單跳脫字元函式
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // 送出分數到 Google 試算表
+        async function submitScoreToCloud() {
+            const name = playerNameInput.value.trim() || "無名玩家";
+            submitScoreBtn.disabled = true;
+            submitScoreBtn.textContent = "上傳中...";
+
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ name: name, score: score })
+                });
+                
+                alert('✨ 分數成功上傳到雲端排行榜！');
+                scoreSubmitSection.classList.add('hidden');
+                fetchLeaderboard(); // 重新整理排行榜
+            } catch (err) {
+                console.error("上傳分數失敗", err);
+                alert('上傳失敗，請檢查網路連線後再試一次！');
+                submitScoreBtn.disabled = false;
+                submitScoreBtn.textContent = "登記分數";
+            }
+        }
+
+        // Initialize / Reset Game state
+        function initGame() {
+            snake = [
+                { x: 10, y: 10 },
+                { x: 9, y: 10 },
+                { x: 8, y: 10 }
+            ];
+            direction = 'RIGHT';
+            nextDirection = 'RIGHT';
+            score = 0;
+            currentScoreEl.textContent = score;
+            spawnFood();
+        }
+
+        // Spawn food at random empty grid cell
+        function spawnFood() {
+            const foodTypes = ['strawberry', 'riceball', 'star'];
+            const randomType = foodTypes[Math.floor(Math.random() * foodTypes.length)];
+            
+            while (true) {
+                const rx = Math.floor(Math.random() * GRID_SIZE);
+                const ry = Math.floor(Math.random() * GRID_SIZE);
+                
+                let collision = snake.some(segment => segment.x === rx && segment.y === ry);
+                if (!collision) {
+                    food = { x: rx, y: ry, type: randomType };
+                    break;
+                }
+            }
+        }
+
+        // Start or Resume Game
+        function startGame() {
+            if (gameState === 'PLAYING') return;
+            
+            if (gameState === 'GAMEOVER' || gameState === 'START') {
+                initGame();
+            }
+
+            gameState = 'PLAYING';
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, gameSpeed);
+        }
+
+        // Pause Game
+        function pauseGame() {
+            if (gameState !== 'PLAYING') return;
+            gameState = 'PAUSED';
+            clearInterval(gameInterval);
+
+            overlayTitle.textContent = '遊戲暫停';
+            overlayDesc.textContent = '休息一下喝杯茶吧～ 點擊按鈕繼續遊戲！';
+            overlayBtn.textContent = '繼續遊戲';
+            overlayBtn.classList.remove('hidden');
+            scoreSubmitSection.classList.add('hidden');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        // Game Over
+        function gameOver() {
+            gameState = 'GAMEOVER';
+            clearInterval(gameInterval);
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('kawaii_snake_highscore', highScore);
+                highScoreEl.textContent = highScore;
+            }
+
+            overlayTitle.textContent = '遊戲結束 >_<';
+            overlayDesc.textContent = `太可惜惹！你獲得了 ${score} 分～`;
+            
+            // 顯示上傳分數區塊，隱藏一般開始按鈕讓玩家可以輸入暱稱
+            scoreSubmitSection.classList.remove('hidden');
+            overlayBtn.textContent = '再玩一次';
+            submitScoreBtn.disabled = false;
+            submitScoreBtn.textContent = "登記分數";
+
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            fetchLeaderboard(); // 遊戲結束時自動更新排行榜
+        }
+
+        // Main Game Loop Update
+        function gameLoop() {
+            direction = nextDirection;
+            
+            const head = { ...snake[0] };
+            if (direction === 'UP') head.y -= 1;
+            else if (direction === 'DOWN') head.y += 1;
+            else if (direction === 'LEFT') head.x -= 1;
+            else if (direction === 'RIGHT') head.x += 1;
+
+            if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+                gameOver();
+                return;
+            }
+
+            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameOver();
+                return;
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                currentScoreEl.textContent = score;
+                spawnFood();
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        // Render Canvas Graphics
+        function draw() {
+            ctx.fillStyle = '#fffef0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#f5f2d0';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= GRID_SIZE; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * TILE_SIZE, 0);
+                ctx.lineTo(i * TILE_SIZE, canvas.height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(0, i * TILE_SIZE);
+                ctx.lineTo(canvas.width, i * TILE_SIZE);
+                ctx.stroke();
+            }
+
+            drawFoodItem();
+
+            snake.forEach((segment, index) => {
+                const x = segment.x * TILE_SIZE;
+                const y = segment.y * TILE_SIZE;
+                
+                if (index === 0) {
+                    ctx.fillStyle = '#ff7597';
+                    ctx.beginPath();
+                    ctx.roundRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4, 8);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(x + 4, y + 5, 3, 4);
+                    ctx.fillRect(x + 13, y + 5, 3, 4);
+                    ctx.fillStyle = '#333333';
+                    ctx.fillRect(x + 5, y + 6, 1, 2);
+                    ctx.fillRect(x + 14, y + 6, 1, 2);
+
+                    ctx.fillStyle = '#ffb6c1';
+                    ctx.fillRect(x + 3, y + 11, 3, 2);
+                    ctx.fillRect(x + 14, y + 11, 3, 2);
+                } else {
+                    ctx.fillStyle = index % 2 === 0 ? '#ff9ebb' : '#ffb6c1';
+                    ctx.beginPath();
+                    ctx.roundRect(x + 3, y + 3, TILE_SIZE - 6, TILE_SIZE - 6, 6);
+                    ctx.fill();
+                }
+            });
+        }
+
+        function drawFoodItem() {
+            const x = food.x * TILE_SIZE;
+            const y = food.y * TILE_SIZE;
+            const cx = x + TILE_SIZE / 2;
+            const cy = y + TILE_SIZE / 2;
+
+            if (food.type === 'strawberry') {
+                ctx.fillStyle = '#ff4d6d';
+                ctx.beginPath();
+                ctx.arc(cx, cy + 2, 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#52b788';
+                ctx.fillRect(cx - 4, cy - 6, 8, 3);
+            } else if (food.type === 'riceball') {
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(x + 3, y + 4, TILE_SIZE - 6, TILE_SIZE - 8, 4);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = '#333333';
+                ctx.fillRect(x + 7, y + 9, TILE_SIZE - 14, 4);
+            } else {
+                ctx.fillStyle = '#ffd166';
+                ctx.beginPath();
+                ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(cx - 2, cy - 2, 4, 4);
+            }
+        }
+
+        function turnLeft() {
+            if (gameState !== 'PLAYING') return;
+            if (direction === 'RIGHT') nextDirection = 'UP';
+            else if (direction === 'UP') nextDirection = 'LEFT';
+            else if (direction === 'LEFT') nextDirection = 'DOWN';
+            else if (direction === 'DOWN') nextDirection = 'RIGHT';
+        }
+
+        function turnRight() {
+            if (gameState !== 'PLAYING') return;
+            if (direction === 'RIGHT') nextDirection = 'DOWN';
+            else if (direction === 'DOWN') nextDirection = 'LEFT';
+            else if (direction === 'LEFT') nextDirection = 'UP';
+            else if (direction === 'UP') nextDirection = 'RIGHT';
+        }
+
+        // Event Listeners
+        window.addEventListener('keydown', (e) => {
+            // 如果正在輸入暱稱，則不攔截左右方向鍵與空白鍵
+            if (document.activeElement === playerNameInput) return;
+
+            if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                turnLeft();
+            } else if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                turnRight();
+            } else if (e.code === 'Space') {
+                e.preventDefault();
+                if (gameState === 'PLAYING') {
+                    pauseGame();
+                } else if (gameState === 'START' || gameState === 'GAMEOVER') {
+                    startGame();
+                }
+            }
+        });
+
+        document.getElementById('btn-left').addEventListener('click', turnLeft);
+        document.getElementById('btn-right').addEventListener('click', turnRight);
+        document.getElementById('btn-pause').addEventListener('click', () => {
+            if (gameState === 'PLAYING') {
+                pauseGame();
+            } else if (gameState === 'START' || gameState === 'GAMEOVER') {
+                startGame();
+            }
+        });
+
+        overlayBtn.addEventListener('click', () => {
+            startGame();
+        });
+
+        submitScoreBtn.addEventListener('click', () => {
+            submitScoreToCloud();
+        });
+
+        // Initial preview draw and load leaderboard
+        initGame();
+        draw();
+        fetchLeaderboard();
+    </script>
+</body>
+</html>
