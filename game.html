@@ -75,9 +75,9 @@
         <div class="text-center mb-2">
             <h1 class="pixel-font text-xl md:text-2xl text-pink-600 drop-shadow-sm mb-1">✨ 軟萌貪食蛇 ✨</h1>
             <p id="control-hint" class="text-xs text-pink-400 font-medium">使用 上下左右鍵控制方向，空白鍵暫停/開始</p>
-            <!-- 靠近牆壁或自己時的動態提示文字 -->
+            <!-- 靠近牆壁或 AI 蛇障礙物時的動態提示文字 -->
             <div id="danger-alert" class="h-5 mt-1 text-xs font-bold text-rose-500 transition-opacity duration-200 opacity-0">
-                ⚠️ 小心！前方快撞到了！
+                ⚠️ 小心！前方有障礙或快撞牆了！
             </div>
         </div>
 
@@ -89,7 +89,7 @@
             <div id="overlay" class="absolute inset-0 bg-pink-900/30 backdrop-blur-xs flex flex-col items-center justify-center rounded-2xl transition-opacity duration-300 overflow-y-auto p-4 z-10">
                 <div id="overlay-card" class="bg-white/95 p-5 rounded-2xl border-4 border-pink-300 shadow-xl text-center w-full max-w-[90%] my-auto">
                     <h2 id="overlay-title" class="pixel-font text-base text-pink-600 mb-2">準備出發！</h2>
-                    <p id="overlay-desc" class="text-xs text-gray-600 mb-4 leading-relaxed">點擊下方按鈕或按下空白鍵開始遊戲吧～</p>
+                    <p id="overlay-desc" class="text-xs text-gray-600 mb-4 leading-relaxed">小心隨著時間出現的 AI 敵對蛇障礙物喔！</p>
                     
                     <!-- 遊戲開始按鈕 -->
                     <button id="overlay-btn" type="button" class="kawaii-btn text-white font-bold px-6 py-2.5 rounded-xl pixel-font text-xs shadow-md mb-3 w-full cursor-pointer hover:brightness-105 active:scale-95 transition">
@@ -119,7 +119,7 @@
         </div>
     </main>
 
-    <!-- Mobile Touch Controls (含上下左右) -->
+    <!-- Mobile Touch Controls -->
     <footer class="w-full max-w-md mt-3 flex flex-col items-center">
         <div class="grid grid-cols-3 gap-2 w-full px-2">
             <!-- 第一行：上 -->
@@ -136,85 +136,4 @@
             <button id="btn-pause" type="button" class="bg-amber-400 border-3 border-amber-500 shadow-[0_4px_0_#b48100] text-white font-bold py-3 rounded-2xl flex items-center justify-center text-xs pixel-font active:scale-95">
                 暫停
             </button>
-            <button id="btn-right" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95">
-                右 ▶
-            </button>
-
-            <!-- 第三行：下 -->
-            <div></div>
-            <button id="btn-down" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95">
-                ▼ 下
-            </button>
-            <div></div>
-        </div>
-    </footer>
-
-    <script>
-        // Google Apps Script Web App URL
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqitUX100l1A1wrokQXiydI6rqCs-tOyk1D5jrRELPwqlqRa75DqboY_cIyXLO2aqmpg/exec';
-
-        // Game Constants & Variables
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        const GRID_SIZE = 20; // 20x20 grid
-        const TILE_SIZE = canvas.width / GRID_SIZE;
-
-        let snake = [];
-        let food = { x: 0, y: 0, type: 'strawberry' };
-        let direction = 'RIGHT'; // 'UP', 'DOWN', 'LEFT', 'RIGHT'
-        let nextDirection = 'RIGHT';
-        let score = 0;
-        let highScore = localStorage.getItem('kawaii_snake_highscore') || 0;
-        let gameInterval = null;
-        let gameSpeed = 130; // ms per frame
-        let gameState = 'START'; // 'START', 'PLAYING', 'PAUSED', 'GAMEOVER'
-
-        // DOM elements
-        const currentScoreEl = document.getElementById('current-score');
-        const highScoreEl = document.getElementById('high-score');
-        const overlay = document.getElementById('overlay');
-        const overlayTitle = document.getElementById('overlay-title');
-        const overlayDesc = document.getElementById('overlay-desc');
-        const overlayBtn = document.getElementById('overlay-btn');
-        const scoreSubmitSection = document.getElementById('score-submit-section');
-        const playerNameInput = document.getElementById('player-name');
-        const submitScoreBtn = document.getElementById('submit-score-btn');
-        const leaderboardList = document.getElementById('leaderboard-list');
-        const dangerAlert = document.getElementById('danger-alert');
-        const gameBox = document.getElementById('game-box');
-
-        highScoreEl.textContent = highScore;
-
-        // 載入雲端排行榜（取前 10 名，顯示玩家填寫的遊戲 ID 暱稱）
-        async function fetchLeaderboard() {
-            leaderboardList.innerHTML = '<p class="text-gray-400 text-center py-2">載入排行榜中...</p>';
-            try {
-                const response = await fetch(APPS_SCRIPT_URL);
-                const result = await response.json();
-                if (result.status === 'success' && result.data) {
-                    renderLeaderboard(result.data);
-                } else {
-                    leaderboardList.innerHTML = '<p class="text-red-400 text-center py-2">暫無排行榜資料</p>';
-                }
-            } catch (err) {
-                console.error("讀取排行榜失敗", err);
-                leaderboardList.innerHTML = '<p class="text-red-400 text-center py-2">無法連線至雲端排行榜</p>';
-            }
-        }
-
-        // 渲染排行榜列表（限制顯示前 10 名）
-        function renderLeaderboard(data) {
-            if (!data || data.length === 0) {
-                leaderboardList.innerHTML = '<p class="text-gray-400 text-center py-2">還沒有人上榜，快來搶頭香！</p>';
-                return;
-            }
-
-            // 取前 10 名
-            const top10 = data.slice(0, 10);
-
-            let html = '<table class="w-full text-left border-collapse">';
-            html += '<tr class="border-b border-pink-200 text-pink-600 font-bold"><th class="py-1 px-1">#</th><th class="py-1 px-1">遊戲ID / 暱稱</th><th class="py-1 px-1 text-right">分數</th></tr>';
-            
-            top10.forEach((item, index) => {
-                html += `<tr class="border-b border-pink-100/50 hover:bg-pink
+            <button id="btn-right" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl
