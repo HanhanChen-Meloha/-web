@@ -120,7 +120,6 @@
                 專注於角色、遊戲及關卡設計，積極探索數位媒體與互動體驗的無限可能。
             </p>
             <div class="pt-4 flex flex-wrap justify-center md:justify-start gap-4">
-                <!-- 新增明顯的遊戲專屬按鈕 -->
                 <a href="game.html" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-sky-500 hover:from-pink-400 hover:to-sky-400 text-white font-semibold shadow-lg shadow-pink-500/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
                     <span>🎮 玩我的小遊戲</span>
                 </a>
@@ -135,10 +134,9 @@
 
         <!-- 個人照片區塊 -->
         <div class="w-64 h-64 sm:w-80 sm:h-80 relative flex-shrink-0">
-            <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-sky-500/30 to-pink-500/30 blur-2xl transform rotate-6"></div>
-            <div class="relative w-full h-full rounded-3xl glass-card p-3 overflow-hidden flex items-center justify-center">
-                <!-- 使用高品質且符合主題的繪畫遊戲風格佔位圖片 -->
-                <img src="https://placehold.co/400x400/1e293b/38bdf8?text=Hanhan+Chen" alt="陳莙涵個人照片" class="w-full h-full object-cover rounded-2xl filter saturate-125">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-sky-500/40 via-purple-500/30 to-pink-500/40 blur-2xl transform rotate-6"></div>
+            <div class="relative w-full h-full rounded-3xl glass-card p-2.5 overflow-hidden flex items-center justify-center border border-white/30 shadow-2xl">
+                <img src="1.jpg" alt="陳莙涵 Hanhan Chen 個人照片" class="w-full h-full object-cover rounded-2xl shadow-inner transition duration-300 hover:scale-105">
             </div>
         </div>
     </section>
@@ -210,13 +208,31 @@
                 <p class="text-slate-400 text-sm">高度關注的創作核心與發展領域。</p>
             </div>
 
-            <!-- 卡片 5 -->
-            <div class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1">
+            <!-- 卡片 5：2025金犢獎入圍獎（含可點擊收合/展開的獎狀） -->
+            <div class="glass-card rounded-2xl p-6 transition-all hover:border-amber-400/50">
                 <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 mb-4 font-bold text-xl">
                     AW
                 </div>
-                <h3 class="text-lg font-semibold mb-2">2025金犢獎入圍獎</h3>
-                <p class="text-slate-400 text-sm">曾獲肯定的創作榮譽與經驗。</p>
+                <h3 class="text-lg font-semibold mb-1">2025金犢獎入圍獎</h3>
+                <p class="text-slate-400 text-sm mb-4">旺仔三層掀蓋式資料夾 - 入圍證書。</p>
+                
+                <!-- 展開/收起獎狀按鈕 -->
+                <button id="toggle-award-btn" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold border border-amber-400/30 transition-all cursor-pointer">
+                    <span>📜 查看入圍獎狀</span>
+                    <svg id="award-arrow" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- 隱藏的獎狀預覽區域 -->
+                <div id="award-container" class="hidden mt-4 pt-3 border-t border-white/10 transition-all duration-300">
+                    <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-amber-400/30 shadow-lg" id="open-award-modal">
+                        <img src="入圍獎狀_328a14.jpg" alt="2025金犢獎入圍獎狀" class="w-full h-auto object-cover rounded-xl transition duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white gap-1 backdrop-blur-xs">
+                            🔍 點擊查看大圖
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 卡片 6 -->
@@ -230,7 +246,22 @@
         </div>
     </section>
 
-    <!-- News & Games 佔位區塊 (對應導覽列要求) -->
+    <!-- 滿版大圖獎狀彈窗 (Modal) -->
+    <div id="award-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative max-w-3xl w-full max-h-[90vh] bg-slate-900 rounded-2xl border border-white/20 shadow-2xl p-4 flex flex-col items-center overflow-hidden">
+            <button id="close-award-modal" type="button" class="absolute top-3 right-3 text-slate-400 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <h3 class="text-lg font-bold text-amber-300 mb-3 px-2">2025金犢獎入圍獎狀</h3>
+            <div class="overflow-y-auto max-h-[80vh] w-full flex justify-center rounded-xl">
+                <img src="入圍獎狀_328a14.jpg" alt="2025金犢獎入圍獎狀完整版" class="max-w-full h-auto rounded-lg shadow-xl">
+            </div>
+        </div>
+    </div>
+
+    <!-- News & Games 佔位區塊 -->
     <div id="news"></div>
     <div id="games"></div>
 
@@ -299,12 +330,40 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // 點擊選單項目後自動收起手機版選單
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
             });
+        });
+
+        // 獎狀收合 / 展開互動邏輯
+        const toggleAwardBtn = document.getElementById('toggle-award-btn');
+        const awardContainer = document.getElementById('award-container');
+        const awardArrow = document.getElementById('award-arrow');
+
+        toggleAwardBtn.addEventListener('click', () => {
+            awardContainer.classList.toggle('hidden');
+            awardArrow.classList.toggle('rotate-180');
+        });
+
+        // 滿版大圖彈窗邏輯
+        const openAwardModal = document.getElementById('open-award-modal');
+        const closeAwardModal = document.getElementById('close-award-modal');
+        const awardModal = document.getElementById('award-modal');
+
+        openAwardModal.addEventListener('click', () => {
+            awardModal.classList.remove('hidden');
+        });
+
+        closeAwardModal.addEventListener('click', () => {
+            awardModal.classList.add('hidden');
+        });
+
+        awardModal.addEventListener('click', (e) => {
+            if (e.target === awardModal) {
+                awardModal.classList.add('hidden');
+            }
         });
     </script>
 </body>
