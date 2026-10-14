@@ -119,21 +119,19 @@
         </div>
     </main>
 
-    <!-- Mobile Touch Controls -->
+    <!-- Mobile Touch Controls (含完整的上下左右與暫停) -->
     <footer class="w-full max-w-md mt-3 flex flex-col items-center">
         <div class="grid grid-cols-3 gap-2 w-full px-2">
-            <!-- 第一行：上 -->
             <div></div>
-            <button id="btn-up" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95">
+            <button id="btn-up" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95 cursor-pointer">
                 ▲ 上
             </button>
             <div></div>
-            
-            <!-- 第二行：左、暫停、右 -->
-            <button id="btn-left" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95">
+
+            <button id="btn-left" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl flex items-center justify-center text-lg shadow-md active:scale-95 cursor-pointer">
                 ◀ 左
             </button>
-            <button id="btn-pause" type="button" class="bg-amber-400 border-3 border-amber-500 shadow-[0_4px_0_#b48100] text-white font-bold py-3 rounded-2xl flex items-center justify-center text-xs pixel-font active:scale-95">
+            <button id="btn-pause" type="button" class="bg-amber-400 border-3 border-amber-500 shadow-[0_4px_0_#b48100] text-white font-bold py-3 rounded-2xl flex items-center justify-center text-xs pixel-font active:scale-95 cursor-pointer">
                 暫停
             </button>
-            <button id="btn-right" type="button" class="kawaii-btn text-white font-bold py-3 rounded-2xl
+            <button id="btn-right" type="button" class="
