@@ -261,9 +261,15 @@
             getDatabase, ref, set, get, onValue, update, remove, onDisconnect 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Firebase Configuration
+        // Firebase Configuration (對應你的專案資料庫)
         const firebaseConfig = {
-            databaseURL: "https://guess-game-50fae-default-rtdb.asia-southeast1.firebasedatabase.app/"
+            apiKey: "AIzaSyBHWevC2-W3M__2hpd9AGGlM0GIMGauay4",
+            authDomain: "rps--411214202.firebaseapp.com",
+            databaseURL: "https://rps--411214202-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "rps--411214202",
+            storageBucket: "rps--411214202.appspot.com",
+            messagingSenderId: "279907981048",
+            appId: "1:279907981048:web:bf0e40493b4d6de885cd0d"
         };
 
         // Initialize Firebase
@@ -348,7 +354,6 @@
 
             myName = nameInput;
 
-            // Generate 4 digit code if empty
             if (!roomCode) {
                 roomCode = Math.floor(1000 + Math.random() * 9000).toString();
             } else if (!/^\d{4}$/.test(roomCode)) {
@@ -365,11 +370,10 @@
                 return;
             }
 
-            // Create new room structure
             const newRoomData = {
                 code: roomCode,
                 createdAt: Date.now(),
-                state: 'waiting', // waiting, playing, revealed
+                state: 'waiting', 
                 players: {
                     [myPlayerId]: {
                         id: myPlayerId,
@@ -418,7 +422,6 @@
                 return;
             }
 
-            // Add player
             await update(ref(db, `rooms/${roomCode}/players/${myPlayerId}`), {
                 id: myPlayerId,
                 name: myName,
@@ -430,7 +433,6 @@
             enterRoom(roomCode);
         };
 
-        // Enter Room listener
         function enterRoom(roomCode) {
             currentRoomCode = roomCode;
             document.getElementById('display-room-code').textContent = roomCode;
@@ -438,11 +440,9 @@
 
             roomRef = ref(db, `rooms/${roomCode}`);
 
-            // Handle disconnect cleanups
             const myPlayerRef = ref(db, `rooms/${roomCode}/players/${myPlayerId}`);
             onDisconnect(myPlayerRef).remove();
 
-            // Listen for room changes
             onValue(roomRef, (snapshot) => {
                 if (!snapshot.exists()) {
                     alert('房間已被關閉或不存在');
@@ -457,9 +457,7 @@
         window.leaveRoom = function() {
             if (currentRoomCode && myPlayerId) {
                 const myPlayerRef = ref(db, `rooms/${currentRoomCode}/players/${myPlayerId}`);
-                remove(myPlayerRef).then(() => {
-                    // If no players left, room will eventually be abandoned or cleaned
-                });
+                remove(myPlayerRef);
             }
             currentRoomCode = null;
             roomRef = null;
@@ -473,17 +471,13 @@
             if (!roomData || !currentRoomCode) return;
             
             playRetroSound('select');
-
-            // Highlight local UI choice
             updateChoiceButtons(choice);
 
-            // Save player choice in Firebase
             await update(ref(db, `rooms/${currentRoomCode}/players/${myPlayerId}`), {
                 choice: choice,
                 ready: true
             });
 
-            // Check if all players in room have chosen
             checkAndEvaluateRound();
         };
 
@@ -502,20 +496,17 @@
             if (!roomData || !roomData.players) return;
             
             const playersArr = Object.values(roomData.players);
-            if (playersArr.length < 2) return; // Need at least 2 players
+            if (playersArr.length < 2) return;
 
             const allReady = playersArr.every(p => p.choice && p.choice !== null);
 
             if (allReady && roomData.state !== 'revealed') {
-                // Determine winners
                 const results = calculateMultiplayerWinner(playersArr);
 
-                // Update database scores and state to 'revealed'
                 const updates = {};
                 updates[`rooms/${currentRoomCode}/state`] = 'revealed';
                 updates[`rooms/${currentRoomCode}/lastResult`] = results;
 
-                // Update scores
                 playersArr.forEach(p => {
                     if (results.winners.includes(p.id)) {
                         updates[`rooms/${currentRoomCode}/players/${p.id}/score`] = (p.score || 0) + 1;
@@ -526,13 +517,10 @@
             }
         }
 
-        // Multi-player 2~3 Player Rock-Paper-Scissors Rules Evaluation
         function calculateMultiplayerWinner(players) {
             const choices = players.map(p => p.choice);
             const uniqueChoices = Array.from(new Set(choices));
 
-            // Case 1: All players pick the same choice -> Tie
-            // Case 2: In a 3-player game, if all 3 distinct signs are picked -> Tie
             if (uniqueChoices.length === 1 || (players.length === 3 && uniqueChoices.length === 3)) {
                 return {
                     isTie: true,
@@ -541,7 +529,6 @@
                 };
             }
 
-            // Case 3: Exactly 2 distinct choices present among players (e.g., Rock vs Scissors)
             let winningChoice = '';
             if (uniqueChoices.includes('rock') && uniqueChoices.includes('scissors')) {
                 winningChoice = 'rock';
@@ -553,7 +540,6 @@
 
             const winners = players.filter(p => p.choice === winningChoice).map(p => p.id);
             const winnerNames = players.filter(p => p.choice === winningChoice).map(p => p.name).join(', ');
-
             const emojiMap = { rock: '✊ 石頭', scissors: '✌️ 剪刀', paper: '🖐️ 布' };
 
             return {
@@ -568,7 +554,6 @@
 
             playRetroSound('select');
 
-            // Reset choices for players
             const updates = {};
             updates[`rooms/${currentRoomCode}/state`] = 'playing';
             updates[`rooms/${currentRoomCode}/lastResult`] = null;
@@ -587,10 +572,8 @@
             const playerList = Object.values(players);
             const pCount = playerList.length;
 
-            // Player Count Badge
             document.getElementById('player-count-badge').textContent = `${pCount}/3 人`;
 
-            // Status Hint
             const statusHint = document.getElementById('game-status-hint');
             if (pCount < 2) {
                 statusHint.textContent = '等待至少 2 人...';
@@ -603,10 +586,8 @@
                 statusHint.className = 'text-blue-600 font-bold';
             }
 
-            // Render Players List
             const playersContainer = document.getElementById('players-list');
             playersContainer.innerHTML = '';
-
             const emojiMap = { rock: '✊', scissors: '✌️', paper: '🖐️' };
 
             playerList.forEach(p => {
@@ -614,7 +595,6 @@
                 const pDiv = document.createElement('div');
                 pDiv.className = `flex items-center justify-between p-2 text-xs border-2 ${isMe ? 'bg-pink-100 border-pink-500' : 'bg-slate-100 border-slate-300'} text-slate-900`;
 
-                // Choice Display logic: Show emoji only if revealed or if it's oneself
                 let choiceText = '⏳ 出拳中...';
                 if (data.state === 'revealed') {
                     choiceText = p.choice ? `${emojiMap[p.choice] || ''}` : '❌ 未出';
@@ -637,7 +617,6 @@
                 playersContainer.appendChild(pDiv);
             });
 
-            // Choice Buttons State
             const myData = players[myPlayerId];
             if (myData) {
                 if (myData.choice) {
@@ -649,7 +628,6 @@
                 }
             }
 
-            // Enable / Disable Choice buttons based on state
             const buttonsDisabled = pCount < 2 || (myData && myData.choice !== null) || data.state === 'revealed';
             ['rock', 'scissors', 'paper'].forEach(c => {
                 const btn = document.getElementById(`btn-${c}`);
@@ -658,7 +636,6 @@
                 btn.style.cursor = buttonsDisabled ? 'not-allowed' : 'pointer';
             });
 
-            // Result Display
             const resultBox = document.getElementById('result-box');
             if (data.state === 'revealed' && data.lastResult) {
                 resultBox.classList.remove('hidden');
@@ -689,7 +666,6 @@
             }
         }
 
-        // Helper to prevent HTML injection
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
