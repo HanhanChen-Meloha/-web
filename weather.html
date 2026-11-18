@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日天氣與生活指南 | Weather & Daily Tips</title>
+  <meta name="description" content="即時查看台北與所在地的現在天氣、未來7天溫度與降雨預報，並提供穿衣、帶傘、跑步及夜遊的貼心生活建議。">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6XSMN2F0PK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6XSMN2F0PK');
+  </script>
+
+  <!-- Google Fonts: Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient-start: #fdfbfb;
+      --bg-gradient-end: #ebedee;
+      --card-bg: rgba(255, 255, 255, 0.78);
+      --card-border: rgba(255, 255, 255, 0.9);
+      --primary-teal: #247881;
+      --primary-teal-hover: #1b5e66;
+      --accent-gold: #c6a468;
+      --text-main: #2d3748;
+      --text-muted: #64748b;
+      --shadow-soft: 0 8px 32px rgba(36, 120, 129, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef9c3 50%, #fce7f3 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      padding: 20px 16px 48px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    /* Header & Controls */
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 16px 20px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .location-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .location-badge {
+      background: var(--primary-teal);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+    }
+
+    .location-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-teal);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(36, 120, 129, 0.25);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-teal-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--primary-teal);
+      border: 1px solid rgba(36, 120, 129, 0.25);
+    }
+
+    .btn-secondary:hover {
+      background-color: #ffffff;
+      border-color: var(--primary-teal);
+    }
+
+    /* Status / Alert Message */
+    .status-bar {
+      display: none;
+      background: rgba(255, 255, 255, 0.9);
+      border-left: 4px solid var(--accent-gold);
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* Glass Card */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-teal);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Current Weather Hero */
+    .current-weather-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .temp-display {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .current-temp {
+      font-size: 3.75rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text-main);
+    }
+
+    .weather-condition {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--primary-teal);
+    }
+
+    .current-meta {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .current-meta span {
+      background: rgba(255, 255, 255, 0.65);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .weather-icon-large {
+      font-size: 4.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.08));
+    }
+
+    /* Lifestyle Advice Grid */
+    .advice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .advice-item {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .advice-item:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .advice-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .advice-category {
+      font-weight: 700;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .advice-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    .tag-good {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .tag-warn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .tag-bad {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .advice-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* 7-Day + Today Forecast List */
+    .forecast-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .forecast-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1.3fr;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.65);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      transition: background 0.15s ease;
+    }
+
+    .forecast-row:hover {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .forecast-row.today-row {
+      background: rgba(36, 120, 129, 0.08);
+      border: 1px solid rgba(36, 120, 129, 0.25);
+      font-weight: 500;
+    }
+
+    .forecast-day {
+      font-weight: 700;
+    }
+
+    .forecast-day small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .forecast-weather {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .forecast-rain {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.88rem;
+      color: #0284c7;
+      font-weight: 500;
+    }
+
+    .forecast-rain.no-rain {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .forecast-temps {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .temp-max {
+      font-weight: 700;
+      color: #e11d48;
+    }
+
+    .temp-min {
+      color: #0284c7;
+      margin-left: 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    footer a {
+      color: var(--primary-teal);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading Skeleton / Pulse */
+    .loading-pulse {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
+      .location-info {
+        justify-content: center;
+      }
+
+      .btn-group {
+        justify-content: center;
+      }
+
+      .current-weather-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .temp-display {
+        justify-content: center;
+      }
+
+      .current-meta {
+        justify-content: center;
+      }
+
+      .weather-icon-large {
+        order: -1;
+        font-size: 4rem;
+      }
+
+      .advice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .forecast-row {
+        grid-template-columns: 1.1fr 0.9fr 0.9fr 1.2fr;
+        padding: 10px 12px;
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Bar -->
+    <header>
+      <div class="location-info">
+        <span class="location-badge" id="location-badge">預設地點</span>
+        <h1 class="location-title" id="location-name">台北市</h1>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn-primary" id="btn-locate">
+          <span>📍</span> 使用我的位置
+        </button>
+        <button type="button" class="btn-secondary" id="btn-taipei" style="display: none;">
+          回到台北
+        </button>
+      </div>
+    </header>
+
+    <!-- Status Notice -->
+    <div class="status-bar" id="status-bar"></div>
+
+    <main id="weather-content">
+      <!-- Current Weather -->
+      <section class="card" aria-label="現在天氣">
+        <div class="section-title">🌤️ 現在天氣</div>
+        <div class="current-weather-grid">
+          <div>
+            <div class="temp-display">
+              <span class="current-temp" id="current-temp">--°</span>
+              <span class="weather-condition" id="current-condition">載入中...</span>
+            </div>
+            <div class="current-meta">
+              <span id="current-apparent">體感溫度 --°C</span>
+              <span id="current-humidity">相對濕度 --%</span>
+              <span id="current-wind">風速 -- km/h</span>
+            </div>
+          </div>
+          <div class="weather-icon-large" id="current-icon">⏳</div>
+        </div>
+      </section>
+
+      <!-- Lifestyle Recommendations -->
+      <section class="card" aria-label="今日生活建議">
+        <div class="section-title">✨ 今日生活小建議</div>
+        <div class="advice-grid" id="advice-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Today + Next 7 Days Forecast -->
+      <section class="card" aria-label="今天與未來7天預報">
+        <div class="section-title">📅 今天與未來 7 天預報</div>
+        <div class="forecast-list" id="forecast-list">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      天氣資料來源：<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>（每小時自動更新） · 
+      <a href="index.html">返回個人首頁</a>
+    </footer>
+  </div>
+
+  <script>
+    // Taipei Default Coordinates
+    const TAIPEI_COORDS = {
+      lat: 25.0330,
+      lon: 121.5654,
+      name: '台北市',
+      badge: '預設地點'
+    };
+
+    // DOM Elements
+    const locationNameEl = document.getElementById('location-name');
+    const locationBadgeEl = document.getElementById('location-badge');
+    const btnLocate = document.getElementById('btn-locate');
+    const btnTaipei = document.getElementById('btn-taipei');
+    const statusBar = document.getElementById('status-bar');
+    const weatherContent = document.getElementById('weather-content');
+
+    // WMO Weather Interpretation Codes (Open-Meteo)
+    function getWeatherInfo(code, isDay = 1) {
+      const weatherMap = {
+        0: { text: '晴朗無雲', icon: isDay ? '☀️' : '🌙', rainy: false },
+        1: { text: '大致晴朗', icon: isDay ? '🌤️' : '🌙', rainy: false },
+        2: { text: '多雲時晴', icon: '⛅', rainy: false },
+        3: { text: '陰天多雲', icon: '☁️', rainy: false },
+        45: { text: '有霧', icon: '🌫️', rainy: false },
+        48: { text: '濃霧', icon: '🌫️', rainy: false },
+        51: { text: '毛毛雨', icon: '🌦️', rainy: true },
+        53: { text: '小雨', icon: '🌦️', rainy: true },
+        55: { text: '陣雨', icon: '🌧️', rainy: true },
+        56: { text: '凍毛毛雨', icon: '🌧️', rainy: true },
+        57: { text: '凍雨', icon: '🌧️', rainy: true },
+        61: { text: '小雨', icon: '🌧️', rainy: true },
+        63: { text: '中雨', icon: '🌧️', rainy: true },
+        65: { text: '大雨', icon: '⛈️', rainy: true },
+        66: { text: '凍雨', icon: '🌧️', rainy: true },
+        67: { text: '強凍雨', icon: '⛈️', rainy: true },
+        71: { text: '小雪', icon: '🌨️', rainy: true },
+        73: { text: '中雪', icon: '❄️', rainy: true },
+        75: { text: '大雪', icon: '❄️', rainy: true },
+        77: { text: '雪粒', icon: '🌨️', rainy: true },
+        80: { text: '短暫陣雨', icon: '🌦️', rainy: true },
+        81: { text: '陣雨', icon: '🌧️', rainy: true },
+        82: { text: '大雷陣雨', icon: '⛈️', rainy: true },
+        85: { text: '陣雪', icon: '🌨️', rainy: true },
+        86: { text: '大陣雪', icon: '❄️', rainy: true },
+        95: { text: '雷陣雨', icon: '⛈️', rainy: true },
+        96: { text: '雷雨伴隨冰雹', icon: '⛈️', rainy: true },
+        99: { text: '強雷雨伴隨冰雹', icon: '⛈️', rainy: true }
+      };
+      return weatherMap[code] || { text: '多雲', icon: '⛅', rainy: false };
+    }
+
+    function showStatus(message) {
+      statusBar.textContent = message;
+      statusBar.style.display = 'block';
+    }
+
+    function hideStatus() {
+      statusBar.style.display = 'none';
+    }
+
+    // Reverse Geocoding using OpenStreetMap Nominatim (Free, no key required)
+    async function getCityName(lat, lon) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=zh-TW`);
+        if (!res.ok) throw new Error('Geocoding failed');
+        const data = await res.json();
+        const addr = data.address || {};
+        const city = addr.city || addr.county || addr.town || addr.state || '';
+        const district = addr.suburb || addr.district || addr.township || '';
+        if (city && district && city !== district) {
+          return `${city} ${district}`;
+        }
+        return city || district || `緯度 ${lat.toFixed(2)}°, 經度 ${lon.toFixed(2)}°`;
+      } catch (e) {
+        return `目前位置 (${lat.toFixed(2)}°, ${lon.toFixed(2)}°)`;
+      }
+    }
+
+    // Fetch Weather from Open-Meteo (forecast_days=8 gives Today + Next 7 Days)
+    async function fetchWeather(lat, lon, displayName, badgeText) {
+      weatherContent.classList.add('loading-pulse');
+      locationNameEl.textContent = displayName;
+      locationBadgeEl.textContent = badgeText;
+
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=8`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('無法取得天氣資料');
+        const data = await response.json();
+
+        renderCurrentWeather(data.current);
+        renderLifestyleAdvice(data.current, data.daily);
+        renderForecastList(data.daily);
+        hideStatus();
+      } catch (error) {
+        showStatus('⚠️ 天氣資料載入失敗，請稍後再試或檢查網路連線。');
+        console.error(error);
+      } finally {
+        weatherContent.classList.remove('loading-pulse');
+      }
+    }
+
+    // Render Current Weather
+    function renderCurrentWeather(current) {
+      const info = getWeatherInfo(current.weather_code, current.is_day);
+      document.getElementById('current-temp').textContent = `${Math.round(current.temperature_2m)}°`;
+      document.getElementById('current-condition').textContent = info.text;
+      document.getElementById('current-icon').textContent = info.icon;
+      document.getElementById('current-apparent').textContent = `體感溫度 ${Math.round(current.apparent_temperature)}°C`;
+      document.getElementById('current-humidity').textContent = `相對濕度 ${current.relative_humidity_2m}%`;
+      document.getElementById('current-wind').textContent = `風速 ${Math.round(current.wind_speed_10m)} km/h`;
+    }
+
+    // Generate Smart Lifestyle Advice
+    function renderLifestyleAdvice(current, daily) {
+      const todayMax = daily.temperature_2m_max[0];
+      const todayMin = daily.temperature_2m_min[0];
+      const rainProb = daily.precipitation_probability_max[0] ?? 0;
+      const rainSum = daily.precipitation_sum[0] ?? 0;
+      const currentTemp = current.temperature_2m;
+      const apparentTemp = current.apparent_temperature;
+      const windSpeed = current.wind_speed_10m;
+      const weatherInfo = getWeatherInfo(current.weather_code, current.is_day);
+      const willRainToday = weatherInfo.rainy || rainProb >= 40 || rainSum > 0.5;
+
+      // 1. Umbrella Advice
+      let umbrella = {};
+      if (rainProb >= 60 || rainSum >= 2) {
+        umbrella = {
+          tag: '務必帶傘',
+          tagClass: 'tag-bad',
+          desc: `今天降雨機率高達 ${rainProb}%，出門記得隨身攜帶雨具，避免淋濕。`
+        };
+      } else if (willRainToday || rainProb >= 30) {
+        umbrella = {
+          tag: '建議備傘',
+          tagClass: 'tag-warn',
+          desc: `降雨機率約 ${rainProb}%，可能有局部短暫雨，帶把折疊傘最安心。`
+        };
+      } else {
+        umbrella = {
+          tag: '不用帶傘',
+          tagClass: 'tag-good',
+          desc: `今天降雨機率僅 ${rainProb}%，天氣穩定，可以輕鬆出門。`
+        };
+      }
+
+      // 2. Clothing Advice
+      let clothing = {};
+      const tempDiff = todayMax - todayMin;
+      if (apparentTemp >= 28) {
+        clothing = {
+          tag: '清涼透氣',
+          tagClass: 'tag-warn',
+          desc: `體感偏熱（最高 ${Math.round(todayMax)}°C），建議穿短袖、棉麻等透氣衣物並注意防曬。`
+        };
+      } else if (apparentTemp >= 22) {
+        clothing = {
+          tag: '舒適薄長袖',
+          tagClass: 'tag-good',
+          desc: `氣溫舒適宜人，短袖搭配薄外套或薄長袖就很剛好。`
+        };
+      } else if (apparentTemp >= 16) {
+        clothing = {
+          tag: '洋蔥式穿搭',
+          tagClass: 'tag-warn',
+          desc: `天氣微涼（低溫 ${Math.round(todayMin)}°C），建議長袖上衣加件針織衫或防風外套。`
+        };
+      } else {
+        clothing = {
+          tag: '注意保暖',
+          tagClass: 'tag-bad',
+          desc: `氣溫偏冷（最低 ${Math.round(todayMin)}°C），請穿上厚外套或毛衣，做好保暖。`
+        };
+      }
+      if (tempDiff >= 7) {
+        clothing.desc += `（日夜溫差達 ${Math.round(tempDiff)}°C，晚歸記得加件外套）`;
+      }
+
+      // 3. Running / Outdoor Exercise Advice
+      let running = {};
+      if (willRainToday && rainProb >= 50) {
+        running = {
+          tag: '建議室內運動',
+          tagClass: 'tag-bad',
+          desc: `路面可能濕滑或有雨勢，今天改在室內做核心訓練或跑步機比較安全。`
+        };
+      } else if (currentTemp >= 31 || currentTemp <= 11 || windSpeed >= 30) {
+        running = {
+          tag: '留意體能負荷',
+          tagClass: 'tag-warn',
+          desc: currentTemp >= 31
+            ? `氣溫偏高，若要跑步請選清晨或傍晚，並隨時補充水分。`
+            : `風勢較強或氣溫偏低，戶外慢跑前請充分熱身並注意防風。`
+        };
+      } else {
+        running = {
+          tag: '非常適合跑步',
+          tagClass: 'tag-good',
+          desc: `溫度與風速都很舒服，非常適合到河濱或公園暢快慢跑！`
+        };
+      }
+
+      // 4. Night Outing Advice
+      let nightOut = {};
+      if (rainProb >= 50 || rainSum >= 1.5) {
+        nightOut = {
+          tag: '不建議夜遊',
+          tagClass: 'tag-bad',
+          desc: `晚間仍有降雨機率且視線較差，建議改約室內咖啡廳或改天再出發。`
+        };
+      } else if (todayMin <= 15 || windSpeed >= 25) {
+        nightOut = {
+          tag: '注意夜間防風',
+          tagClass: 'tag-warn',
+          desc: `入夜後氣溫降至 ${Math.round(todayMin)}°C 左右且微風偏涼，夜遊請多加件防風外套。`
+        };
+      } else {
+        nightOut = {
+          tag: '適合出門夜遊',
+          tagClass: 'tag-good',
+          desc: `晚間無明顯降雨且氣溫宜人（約 ${Math.round(todayMin)}~${Math.round(currentTemp)}°C），很適合散步看夜景。`
+        };
+      }
+
+      const items = [
+        { icon: '☂️', title: '出門帶傘', ...umbrella },
+        { icon: '👕', title: '穿衣搭配', ...clothing },
+        { icon: '🏃', title: '戶外跑步', ...running },
+        { icon: '🌃', title: '晚上夜遊', ...nightOut }
+      ];
+
+      const grid = document.getElementById('advice-grid');
+      grid.innerHTML = items.map(item => `
+        <div class="advice-item">
+          <div class="advice-header">
+            <span class="advice-category">${item.icon} ${item.title}</span>
+            <span class="advice-tag ${item.tagClass}">${item.tag}</span>
+          </div>
+          <p class="advice-desc">${item.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    // Render Today + Next 7 Days Forecast
+    function renderForecastList(daily) {
+      const weekDays = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+      const listEl = document.getElementById('forecast-list');
+
+      listEl.innerHTML = daily.time.map((dateStr, idx) => {
+        const dateObj = new Date(dateStr + 'T00:00:00');
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        const weekDay = weekDays[dateObj.getDay()];
+
+        let dayLabel = `${month}/${day} (${weekDay})`;
+        let subLabel = '';
+        if (idx === 0) {
+          dayLabel = '今天';
+          subLabel = `${month}/${day} ${weekDay}`;
+        } else if (idx === 1) {
+          dayLabel = '明天';
+          subLabel = `${month}/${day} ${weekDay}`;
+        }
+
+        const code = daily.weather_code[idx];
+        const info = getWeatherInfo(code, 1);
+        const maxTemp = Math.round(daily.temperature_2m_max[idx]);
+        const minTemp = Math.round(daily.temperature_2m_min[idx]);
+        const rainProb = daily.precipitation_probability_max[idx] ?? 0;
+        const rainSum = daily.precipitation_sum[idx] ?? 0;
+        const willRain = info.rainy || rainProb >= 40 || rainSum > 0.5;
+
+        const rainText = willRain
+          ? `💧 會下雨 (${rainProb}%)`
+          : `☀️ 不易降雨 (${rainProb}%)`;
+
+        return `
+          <div class="forecast-row ${idx === 0 ? 'today-row' : ''}">
+            <div class="forecast-day">
+              ${dayLabel}
+              ${subLabel ? `<small>${subLabel}</small>` : ''}
+            </div>
+            <div class="forecast-weather">
+              <span>${info.icon}</span>
+              <span>${info.text}</span>
+            </div>
+            <div class="forecast-rain ${willRain ? '' : 'no-rain'}">
+              ${rainText}
+            </div>
+            <div class="forecast-temps">
+              <span class="temp-max">${maxTemp}°</span>
+              <span class="temp-min">${minTemp}°</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Geolocation Handler
+    btnLocate.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        showStatus('⚠️ 您的瀏覽器不支援定位功能，目前為您顯示台北天氣。');
+        return;
+      }
+
+      btnLocate.disabled = true;
+      btnLocate.innerHTML = '<span>⏳</span> 定位中...';
+      showStatus('正在取得您的目前位置，請在瀏覽器提示中點選「允許」...');
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const placeName = await getCityName(latitude, longitude);
+          await fetchWeather(latitude, longitude, placeName, '目前位置');
+          btnLocate.disabled = false;
+          btnLocate.innerHTML = '<span>📍</span> 更新我的位置';
+          btnTaipei.style.display = 'inline-flex';
+        },
+        (err) => {
+          btnLocate.disabled = false;
+          btnLocate.innerHTML = '<span>📍</span> 使用我的位置';
+          let msg = '無法取得您的位置，已維持顯示台北天氣。';
+          if (err.code === 1) {
+            msg = '您已拒絕位置權限，若需查看所在地天氣，請在瀏覽器設定中開啟位置權限。';
+          }
+          showStatus('⚠️ ' + msg);
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+
+    // Reset to Taipei Handler
+    btnTaipei.addEventListener('click', () => {
+      fetchWeather(TAIPEI_COORDS.lat, TAIPEI_COORDS.lon, TAIPEI_COORDS.name, TAIPEI_COORDS.badge);
+      btnTaipei.style.display = 'none';
+      btnLocate.innerHTML = '<span>📍</span> 使用我的位置';
+    });
+
+    // Initial Load: Taipei
+    fetchWeather(TAIPEI_COORDS.lat, TAIPEI_COORDS.lon, TAIPEI_COORDS.name, TAIPEI_COORDS.badge);
+  </script>
+</body>
+</html>
