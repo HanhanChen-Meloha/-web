@@ -247,6 +247,29 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+            <!-- 天氣預報小卡 -->
+            <a href="weather.html" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-sky-400/50 group block relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-sky-500/10 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <span id="home-weather-icon">🌤️</span>
+                    </div>
+                    <span class="text-[10px] bg-sky-500/30 border border-sky-400/30 text-sky-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> 台北市即時
+                    </span>
+                </div>
+                <div class="flex items-baseline justify-between mb-2">
+                    <h3 class="text-lg font-semibold group-hover:text-sky-300 transition-colors">今日天氣預報</h3>
+                    <span class="text-2xl font-bold text-slate-100" id="home-weather-temp">--°C</span>
+                </div>
+                <p class="text-slate-300 text-sm mb-3" id="home-weather-desc">載入天氣狀況中...</p>
+                <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                    <span id="home-weather-rain">降雨機率預測中...</span>
+                    <span class="text-sky-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 font-medium">詳細預報 &rarr;</span>
+                </div>
+            </a>
+
             <!-- 卡片 1 -->
             <div class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1">
                 <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 mb-4 font-bold text-xl">
@@ -514,5 +537,54 @@
                 });
         });
     </script>
+
+    <!-- 首頁動態取得 Open-Meteo 台北天氣小卡指令 -->
+    <script>
+      async function loadHomeWeather() {
+        try {
+          const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.0330&longitude=121.5654&current=temperature_2m,weather_code,is_day,precipitation&daily=precipitation_probability_max,precipitation_sum&timezone=auto');
+          if (!res.ok) throw new Error('Failed to fetch weather');
+          const data = await res.json();
+          
+          const temp = Math.round(data.current.temperature_2m);
+          const code = data.current.weather_code;
+          const isDay = data.current.is_day;
+          
+          const weatherMap = {
+            0: { text: '晴朗無雲', icon: isDay ? '☀️' : '🌙' },
+            1: { text: '大致晴朗', icon: isDay ? '🌤️' : '🌙' },
+            2: { text: '多雲時晴', icon: '⛅' },
+            3: { text: '陰天多雲', icon: '☁️' },
+            45: { text: '有霧', icon: '🌫️' },
+            48: { text: '濃霧', icon: '🌫️' },
+            51: { text: '毛毛雨', icon: '🌦️' },
+            53: { text: '小雨', icon: '🌦️' },
+            55: { text: '陣雨', icon: '🌧️' },
+            61: { text: '小雨', icon: '🌧️' },
+            63: { text: '中雨', icon: '🌧️' },
+            65: { text: '大雨', icon: '⛈️' },
+            80: { text: '短暫陣雨', icon: '🌦️' },
+            81: { text: '陣雨', icon: '🌧️' },
+            82: { text: '大雷陣雨', icon: '⛈️' },
+            95: { text: '雷陣雨', icon: '⛈️' }
+          };
+          const info = weatherMap[code] || { text: '多雲', icon: '⛅' };
+          
+          const rainProb = data.daily.precipitation_probability_max[0] ?? 0;
+          const rainSum = data.daily.precipitation_sum[0] ?? 0;
+          const willRain = rainProb >= 40 || rainSum > 0.5;
+
+          document.getElementById('home-weather-icon').textContent = info.icon;
+          document.getElementById('home-weather-temp').textContent = `${temp}°C`;
+          document.getElementById('home-weather-desc').textContent = info.text;
+          document.getElementById('home-weather-rain').textContent = willRain ? `💧 今日降雨機率 ${rainProb}%` : `☀️ 降雨機率低 (${rainProb}%)`;
+        } catch (e) {
+          document.getElementById('home-weather-desc').textContent = '點擊查看完整 7 天天氣預報';
+          document.getElementById('home-weather-rain').textContent = 'Open-Meteo 天氣連結';
+        }
+      }
+      loadHomeWeather();
+    </script>
+
 </body>
 </html>
