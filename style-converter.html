@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖文設計風格轉換器 - 陳莙涵 Hanhan Chen</title>
+
+    <!-- SEO Meta Description -->
+    <meta name="description" content="可以將字體和圖片轉換成想要的風格只要有的風格都可以">
+    <meta name="author" content="陳莙涵 Hanhan Chen">
+
+    <!-- Open Graph (LINE, Facebook 等社群分享卡片) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hanhanchen-meloha.github.io/-web/style-converter.html">
+    <meta property="og:title" content="圖文設計風格轉換器 - 一鍵轉換字體與圖片視覺風格">
+    <meta property="og:description" content="可以將字體和圖片轉換成想要的風格只要有的風格都可以">
+    <meta property="og:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="圖文設計風格轉換器 - 一鍵轉換字體與圖片視覺風格">
+    <meta name="twitter:description" content="可以將字體和圖片轉換成想要的風格只要有的風格都可以">
+    <meta name="twitter:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
+
+    <!-- Favicon (32x32 專屬品牌 SVG，參考圖一青藍金白配色與 HC 標識) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b6b77' stroke='%23cbd5e1' stroke-width='1.5'/%3E%3Cpath d='M5 7h10v18H5z' fill='%23b5945b'/%3E%3Cpath d='M8 9h4v14H8z' fill='%23ffffff'/%3E%3Ctext x='16' y='21' font-family='Arial,sans-serif' font-weight='bold' font-size='10' fill='%23ffffff'%3EHC%3C/text%3E%3C/svg%3E">
+
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6XSMN2F0PK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6XSMN2F0PK');
+    </script>
+
+    <!-- Tailwind CSS & Google Fonts (包含多種可切換的設計字體) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@600;900&family=ZCOOL+KuaiLe&family=DotGothic16&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .bg-mesh {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.3) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(168, 85, 247, 0.25) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(236, 72, 153, 0.2) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-mesh text-slate-100 min-h-screen selection:bg-pink-500 selection:text-white">
+
+    <!-- 導覽列 -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xl font-bold tracking-wider bg-gradient-to-r from-sky-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
+                    Hanhan Chen
+                </a>
+                <span class="text-slate-500">/</span>
+                <span class="text-sm font-medium text-pink-300">圖文設計風格轉換器</span>
+            </div>
+            
+            <!-- 回首頁連結 -->
+            <a href="index.html" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-medium transition-all flex items-center gap-2 shadow-sm">
+                <span>🏠</span> 回首頁
+            </a>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8">
+        
+        <!-- 標題區 -->
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-card text-xs text-pink-300 border border-pink-400/30">
+                🎨 多風格字體排版 × 即時圖片濾鏡合成
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-sky-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
+                圖文設計風格轉換器
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base">
+                上傳圖片並輸入設計文字，一鍵將字體與圖片轉換成賽博龐克、復古報紙、8-bit 像素、日系水彩等任何想要的風格！
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- 左側控制面板 -->
+            <section class="lg:col-span-5 glass-card rounded-3xl p-6 space-y-5">
+                
+                <!-- 1. 上傳圖片 -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-2">1. 上傳背景圖片（或使用內建範例圖）</label>
+                    <input type="file" id="image-upload" accept="image/*" class="w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-300 hover:file:bg-sky-500/30 cursor-pointer bg-slate-900/60 rounded-xl border border-white/15 p-1.5">
+                </div>
+
+                <!-- 2. 輸入文字 -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-2">2. 輸入設計主標題與副標</label>
+                    <input type="text" id="text-main" value="Hanhan Design Studio" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white mb-2.5 focus:outline-none focus:border-pink-400">
+                    <input type="text" id="text-sub" value="創意視覺・遊戲美術・風格實驗" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-400">
+                </div>
+
+                <!-- 3. 選擇轉換風格 -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-2">3. 選擇圖文設計風格</label>
+                    <div class="grid grid-cols-2 gap-2.5" id="style-buttons">
+                        <button type="button" data-style="cyberpunk" class="style-btn px-3 py-2.5 rounded-xl bg-pink-500/30 border border-pink-400 text-xs font-semibold text-white text-left transition">
+                            ⚡ 賽博龐克霓虹
+                        </button>
+                        <button type="button" data-style="pixel" class="style-btn px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-200 text-left transition">
+                            👾 8-Bit 復古像素
+                        </button>
+                        <button type="button" data-style="editorial" class="style-btn px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-200 text-left transition">
+                            📰 典雅雜誌明體
+                        </button>
+                        <button type="button" data-style="popart" class="style-btn px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-200 text-left transition">
+                            💥 普普藝術漫畫
+                        </button>
+                        <button type="button" data-style="vintage" class="style-btn px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-200 text-left transition">
+                            🎞️ 懷舊底片膠捲
+                        </button>
+                        <button type="button" data-style="minimal" class="style-btn px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-200 text-left transition">
+                            🤍 日系極簡留白
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. 文字大小微調 -->
+                <div>
+                    <div class="flex justify-between text-xs text-slate-300 mb-1">
+                        <span>字體大小調整</span>
+                        <span id="font-size-label">42px</span>
+                    </div>
+                    <input type="range" id="font-size" min="24" max="72" value="42" class="w-full accent-pink-400 cursor-pointer">
+                </div>
+
+                <!-- 下載成果按鈕 -->
+                <button id="download-btn" type="button" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500 hover:from-sky-400 hover:to-pink-400 text-white font-semibold text-sm shadow-lg shadow-pink-500/25 transition-all cursor-pointer">
+                    ⬇️ 下載轉換後的 PNG 圖片
+                </button>
+            </section>
+
+            <!-- 右側即時畫布預覽區 -->
+            <section class="lg:col-span-7 glass-card rounded-3xl p-6 flex flex-col items-center justify-center space-y-4">
+                <div class="w-full flex items-center justify-between text-xs text-slate-400">
+                    <span>即時設計預覽畫布 (1200 × 800)</span>
+                    <span id="current-style-badge" class="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-400/30">當前風格：賽博龐克霓虹</span>
+                </div>
+                
+                <div class="w-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-slate-950">
+                    <canvas id="design-canvas" width="1200" height="800" class="w-full h-auto block"></canvas>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="glass-nav py-8 px-4 text-center text-xs text-slate-400">
+        <p>&copy; 2026 陳莙涵 Hanhan Chen. All rights reserved. | <a href="index.html" class="text-sky-400 hover:underline">返回作品集首頁</a></p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('design-canvas');
+        const ctx = canvas.getContext('2d');
+        const uploadInput = document.getElementById('image-upload');
+        const mainTextInput = document.getElementById('text-main');
+        const subTextInput = document.getElementById('text-sub');
+        const fontSizeInput = document.getElementById('font-size');
+        const fontSizeLabel = document.getElementById('font-size-label');
+        const styleBadge = document.getElementById('current-style-badge');
+        const styleButtons = document.querySelectorAll('.style-btn');
+        const downloadBtn = document.getElementById('download-btn');
+
+        let currentStyle = 'cyberpunk';
+        let uploadedImage = null;
+
+        // 風格設定字典
+        const stylesConfig = {
+            cyberpunk: {
+                label: '賽博龐克霓虹',
+                filter: 'contrast(135%) saturate(160%) hue-rotate(-15deg)',
+                overlay: 'rgba(15, 23, 42, 0.45)',
+                font: '900 {size}px "Orbitron", "Noto Sans TC", sans-serif',
+                subFont: '500 26px "Noto Sans TC", sans-serif',
+                textColor: '#38bdf8',
+                shadowColor: '#ec4899',
+                shadowBlur: 25,
+                borderColor: '#ec4899'
+            },
+            pixel: {
+                label: '8-Bit 復古像素',
+                filter: 'contrast(120%) saturate(130%)',
+                overlay: 'rgba(17, 24, 39, 0.4)',
+                font: '700 {size}px "DotGothic16", monospace',
+                subFont: '400 28px "DotGothic16", monospace',
+                textColor: '#fde047',
+                shadowColor: '#000000',
+                shadowBlur: 0,
+                borderColor: '#4ade80'
+            },
+            editorial: {
+                label: '典雅雜誌明體',
+                filter: 'grayscale(35%) contrast(110%) brightness(95%)',
+                overlay: 'rgba(0, 0, 0, 0.35)',
+                font: '900 {size}px "Noto Serif TC", serif',
+                subFont: '600 24px "Noto Serif TC", serif',
+                textColor: '#ffffff',
+                shadowColor: 'rgba(0,0,0,0.6)',
+                shadowBlur: 12,
+                borderColor: '#e2e8f0'
+            },
+            popart: {
+                label: '普普藝術漫畫',
+                filter: 'saturate(240%) contrast(150%)',
+                overlay: 'rgba(234, 179, 8, 0.2)',
+                font: '400 {size}px "ZCOOL KuaiLe", "Noto Sans TC", sans-serif',
+                subFont: '700 26px "Noto Sans TC", sans-serif',
+                textColor: '#fef08a',
+                shadowColor: '#ef4444',
+                shadowBlur: 0,
+                borderColor: '#facc15'
+            },
+            vintage: {
+                label: '懷舊底片膠捲',
+                filter: 'sepia(65%) contrast(95%) brightness(105%)',
+                overlay: 'rgba(69, 26, 3, 0.3)',
+                font: '700 {size}px "Noto Serif TC", serif',
+                subFont: '400 24px "Noto Sans TC", sans-serif',
+                textColor: '#fef3c7',
+                shadowColor: 'rgba(69, 26, 3, 0.8)',
+                shadowBlur: 10,
+                borderColor: '#d97706'
+            },
+            minimal: {
+                label: '日系極簡留白',
+                filter: 'brightness(112%) contrast(90%) saturate(80%)',
+                overlay: 'rgba(255, 255, 255, 0.25)',
+                font: '700 {size}px "Noto Sans TC", sans-serif',
+                subFont: '400 24px "Noto Sans TC", sans-serif',
+                textColor: '#0f172a',
+                shadowColor: 'rgba(255, 255, 255, 0.8)',
+                shadowBlur: 8,
+                borderColor: '#ffffff'
+            }
+        };
+
+        // 繪製預設漸層背景（無上傳圖片時）
+        function drawDefaultBg() {
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#1b6b77');
+            grad.addColorStop(0.5, '#312e81');
+            grad.addColorStop(1, '#831843');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function renderCanvas() {
+            const cfg = stylesConfig[currentStyle];
+            const scaleSize = parseInt(fontSizeInput.value, 10) * 1.8;
+            fontSizeLabel.textContent = `${fontSizeInput.value}px`;
+            styleBadge.textContent = `當前風格：${cfg.label}`;
+
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. 繪製底圖與濾鏡
+            ctx.filter = cfg.filter;
+            if (uploadedImage) {
+                // 等比例滿版裁切繪製 (Cover)
+                const imgRatio = uploadedImage.width / uploadedImage.height;
+                const canvasRatio = canvas.width / canvas.height;
+                let drawW, drawH, offsetX, offsetY;
+                if (imgRatio > canvasRatio) {
+                    drawH = canvas.height;
+                    drawW = canvas.height * imgRatio;
+                    offsetX = (canvas.width - drawW) / 2;
+                    offsetY = 0;
+                } else {
+                    drawW = canvas.width;
+                    drawH = canvas.width / imgRatio;
+                    offsetX = 0;
+                    offsetY = (canvas.height - drawH) / 2;
+                }
+                ctx.drawImage(uploadedImage, offsetX, offsetY, drawW, drawH);
+            } else {
+                drawDefaultBg();
+            }
+            ctx.restore();
+
+            // 2. 風格色調遮罩
+            ctx.fillStyle = cfg.overlay;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 3. 設計外框裝飾
+            ctx.strokeStyle = cfg.borderColor;
+            ctx.lineWidth = currentStyle === 'minimal' ? 28 : 6;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+            // 4. 繪製主標題文字
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = cfg.font.replace('{size}', Math.round(scaleSize));
+            ctx.fillStyle = cfg.textColor;
+            ctx.shadowColor = cfg.shadowColor;
+            ctx.shadowBlur = cfg.shadowBlur;
+
+            if (currentStyle === 'pixel' || currentStyle === 'popart') {
+                ctx.shadowOffsetX = 6;
+                ctx.shadowOffsetY = 6;
+            }
+
+            const mainText = mainTextInput.value || 'Hanhan Design';
+            ctx.fillText(mainText, canvas.width / 2, canvas.height / 2 - 25);
+
+            // 5. 繪製副標題文字
+            ctx.font = cfg.subFont;
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            const subText = subTextInput.value || '';
+            ctx.fillText(subText, canvas.width / 2, canvas.height / 2 + scaleSize * 0.85);
+            ctx.restore();
+        }
+
+        // 上傳圖片監聽
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    renderCanvas();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 風格按鈕切換
+        styleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                styleButtons.forEach(b => {
+                    b.classList.remove('bg-pink-500/30', 'border-pink-400', 'text-white');
+                    b.classList.add('bg-white/5', 'border-white/15', 'text-slate-200');
+                });
+                btn.classList.remove('bg-white/5', 'border-white/15', 'text-slate-200');
+                btn.classList.add('bg-pink-500/30', 'border-pink-400', 'text-white');
+                currentStyle = btn.dataset.style;
+                renderCanvas();
+            });
+        });
+
+        [mainTextInput, subTextInput, fontSizeInput].forEach(el => {
+            el.addEventListener('input', renderCanvas);
+        });
+
+        // 下載圖片
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = `hanhan-style-${currentStyle}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        // 確保字體載入後重繪
+        document.fonts.ready.then(renderCanvas);
+        renderCanvas();
+    </script>
+</body>
+</html>
