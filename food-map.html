@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>世界美食地圖 - 陳莙涵 Hanhan Chen</title>
+    <title>台灣美食地圖 - 陳莙涵 Hanhan Chen</title>
 
     <!-- SEO Meta Description -->
-    <meta name="description" content="可以查詢不同國家地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
+    <meta name="description" content="可以查詢台灣各縣市地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
     <meta name="author" content="陳莙涵 Hanhan Chen">
 
     <!-- Open Graph (LINE, Facebook 等社群分享卡片) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hanhanchen-meloha.github.io/-web/food-map.html">
-    <meta property="og:title" content="世界美食地圖 - 探索全球美味與預算餐廳推薦">
-    <meta property="og:description" content="可以查詢不同國家地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
+    <meta property="og:title" content="台灣美食地圖 - 探索全台美味與預算餐廳推薦">
+    <meta property="og:description" content="可以查詢台灣各縣市地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
     <meta property="og:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="世界美食地圖 - 探索全球美味與預算餐廳推薦">
-    <meta name="twitter:description" content="可以查詢不同國家地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
+    <meta name="twitter:title" content="台灣美食地圖 - 探索全台美味與預算餐廳推薦">
+    <meta name="twitter:description" content="可以查詢台灣各縣市地方的美食和餐廳餐館路邊攤及開關門的時間地點還有食物的圖文和評論等還有推薦附近美食並告訴距離和是否有開門及想要吃哪種菜系和幫忙計算自己一餐有多少預算可以去哪吃飯的功能">
     <meta name="twitter:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
 
     <!-- Favicon (32x32 專屬品牌 SVG) -->
@@ -74,7 +74,7 @@
                     Hanhan Chen
                 </a>
                 <span class="text-slate-500">/</span>
-                <span class="text-sm font-medium text-sky-300">世界美食地圖</span>
+                <span class="text-sm font-medium text-sky-300">台灣美食地圖</span>
             </div>
             
             <!-- 回首頁連結 -->
@@ -90,13 +90,13 @@
         <!-- 標題與介紹 -->
         <div class="text-center max-w-3xl mx-auto space-y-3">
             <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-card text-xs text-sky-300 border border-sky-400/30">
-                🌍 Google Maps 實景串接 × 真實 GPS 距離測算 × 預算推薦
+                🇹🇼 台灣美食探索 × Google Maps 真實資料 × 預算計算
             </div>
             <h1 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-sky-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
-                世界美食地圖
+                台灣美食地圖
             </h1>
             <p class="text-slate-300 text-sm sm:text-base">
-                支援真實 GPS 抓取附近餐廳、即時營業狀態判定、預算篩選，並可直接檢視 Google Maps 圖文評論與導航！
+                專屬台灣的美食雷達！可自由打字搜尋想吃的食物或地點、支援真實 GPS 抓取附近餐廳、即時營業狀態與預算篩選。
             </p>
         </div>
 
@@ -105,64 +105,78 @@
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10">
                 <div class="flex items-center gap-2 text-xs text-slate-300">
                     <span id="gps-status" class="px-2.5 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30">
-                        📍 預設基準點：台北市中山區 (可點擊右側抓取你的真實位置)
+                        📍 預設基準點：台北市中山／大同區 (可點擊右側抓取你的真實位置)
                     </span>
                 </div>
                 <button id="locate-btn" type="button" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs font-semibold shadow-lg transition flex items-center gap-1.5 cursor-pointer">
-                    <span>📡</span> 抓取我附近的真實餐廳 (GPS)
+                    <span>📡</span> 抓取我附近的真實台灣餐廳 (GPS)
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- 國家/地區 -->
+            <!-- 五欄位篩選列：含可自己打字寫選項的搜尋欄 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <!-- 1. 可自己打字寫選項的搜尋欄 -->
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <label class="block text-xs font-medium text-pink-300 mb-1.5">✍️ 自己打字搜尋（店名/食物/地點）</label>
+                    <div class="flex gap-1.5">
+                        <input type="text" id="custom-keyword" placeholder="輸入如：牛肉麵、逢甲..." class="w-full rounded-xl bg-slate-900/70 border border-pink-400/40 px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-400">
+                        <button id="custom-search-btn" type="button" title="在 Google 地圖搜尋" class="px-3 rounded-xl bg-pink-500/30 hover:bg-pink-500/50 border border-pink-400/40 text-xs font-semibold text-white transition flex-shrink-0 cursor-pointer">
+                            搜地圖
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. 台灣縣市地區 -->
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">🌐 國家 / 地區</label>
-                    <select id="filter-country" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-400">
-                        <option value="all">全部國家地區</option>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">🏙️ 台灣縣市地區</label>
+                    <select id="filter-city" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-400">
+                        <option value="all">全台灣縣市</option>
                         <option value="附近真實搜尋" id="nearby-option" class="hidden">📡 我附近的真實店家</option>
-                        <option value="台灣">台灣 (台北 / 台南)</option>
-                        <option value="日本">日本 (東京 / 大阪)</option>
-                        <option value="韓國">韓國 (首爾)</option>
-                        <option value="泰國">泰國 (曼谷)</option>
-                        <option value="義大利">義大利 (羅馬)</option>
+                        <option value="台北市">台北市</option>
+                        <option value="新北市">新北市</option>
+                        <option value="桃園市">桃園市</option>
+                        <option value="台中市">台中市</option>
+                        <option value="台南市">台南市</option>
+                        <option value="高雄市">高雄市</option>
+                        <option value="宜蘭花蓮">宜蘭 / 花蓮</option>
                     </select>
                 </div>
 
-                <!-- 菜系與類型 -->
+                <!-- 3. 菜系與類型 -->
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1.5">🍜 想吃哪種菜系 / 類型</label>
                     <select id="filter-cuisine" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-400">
                         <option value="all">全部菜系與類型</option>
                         <option value="路邊攤小吃">路邊攤 / 夜市小吃</option>
-                        <option value="台式料理">台式料理 / 牛肉麵</option>
+                        <option value="台式料理">台式料理 / 牛肉麵 / 熱炒</option>
                         <option value="日式料理">日式拉麵 / 壽司</option>
-                        <option value="韓式料理">韓式烤肉 / 街頭美食</option>
-                        <option value="泰式料理">泰式酸辣 / 船麵</option>
-                        <option value="義式餐館">義式披薩 / 義大利麵</option>
-                        <option value="咖啡甜點">咖啡廳 / 甜點</option>
+                        <option value="火鍋燒肉">火鍋 / 燒肉</option>
+                        <option value="咖啡甜點">咖啡廳 / 冰品甜點</option>
                     </select>
                 </div>
 
-                <!-- 一餐預算計算機 -->
+                <!-- 4. 一餐預算計算機 -->
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1.5">💰 我這餐的預算 (TWD 台幣)</label>
-                    <input type="number" id="filter-budget" placeholder="例如：300 (留空不限)" min="0" step="50" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-400">
+                    <input type="number" id="filter-budget" placeholder="例如：200 (留空不限)" min="0" step="50" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-400">
                 </div>
 
-                <!-- 營業與距離排序 -->
+                <!-- 5. 營業與距離排序 -->
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">📍 排序與狀態</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">📍 排序與營業狀態</label>
                     <select id="filter-sort" class="w-full rounded-xl bg-slate-900/70 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-400">
                         <option value="distance">推薦附近美食 (距離由近到遠)</option>
                         <option value="open">僅顯示「目前營業中」</option>
                         <option value="price-asc">價格由低到高</option>
                     </select>
                 </div>
+
             </div>
 
             <!-- 預算計算提示列 -->
             <div id="budget-summary" class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10 text-xs sm:text-sm text-slate-300">
-                <span id="result-count">正在載入全球美食資料庫...</span>
+                <span id="result-count">正在載入台灣美食資料庫...</span>
                 <button id="reset-btn" type="button" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs transition cursor-pointer">
                     重置篩選條件
                 </button>
@@ -173,14 +187,14 @@
         <section class="glass-card rounded-3xl p-4 sm:p-6 space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
                 <span class="font-semibold text-sky-300 flex items-center gap-1.5">
-                    🗺️ Google Maps 真實地圖預覽：<span id="map-current-target" class="text-white">台北市熱門美食區</span>
+                    🗺️ Google Maps 真實地圖預覽：<span id="map-current-target" class="text-white">台灣熱門美食</span>
                 </span>
-                <a id="map-external-link" href="https://www.google.com/maps/search/?api=1&query=台北市美食" target="_blank" rel="noopener noreferrer" class="text-pink-300 hover:underline">
-                    在 Google Maps App 中開啟 &rarr;
+                <a id="map-external-link" href="https://www.google.com/maps/search/?api=1&query=台灣美食" target="_blank" rel="noopener noreferrer" class="text-pink-300 hover:underline">
+                    在 Google Maps App 中開啟完整圖文評論 &rarr;
                 </a>
             </div>
             <div class="w-full h-72 sm:h-80 rounded-2xl overflow-hidden border border-white/20 bg-slate-900">
-                <iframe id="gmap-iframe" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=台北市中山區美食&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+                <iframe id="gmap-iframe" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=台北市大同區美食&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </section>
 
@@ -197,11 +211,11 @@
     </footer>
 
     <script>
-        // 基準座標（預設：台北中山區）
-        let userLat = 25.0525;
-        let userLng = 121.5205;
+        // 基準座標（預設：台北大同區／中山商圈周邊）
+        let userLat = 25.0560;
+        let userLng = 121.5180;
 
-        // 計算兩組經緯度之間的真實距離 (Haversine 公式，回傳公里)
+        // 計算兩組經緯度之間的真實直線距離 (Haversine 公式，回傳公里)
         function calcDistanceKm(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -221,17 +235,34 @@
             if (closeHour > openHour) {
                 return currentHour >= openHour && currentHour < closeHour;
             } else {
-                // 跨午夜營業（例如 17:00 - 02:00）
                 return currentHour >= openHour || currentHour < closeHour;
             }
         }
 
-        // 真實存在的知名美食店家資料庫（含真實經緯度與 Google Maps 搜尋關鍵字）
+        // 台灣各地真實存在的高人氣美食店家資料庫（含真實經緯度與 Google Maps 搜尋關鍵字）
         let foodData = [
             {
+                name: "雙連圓仔湯 & 寧夏夜市方家雞肉飯",
+                cityGroup: "台北市",
+                district: "台北市・大同區",
+                type: "路邊攤小吃",
+                cuisine: "路邊攤小吃",
+                price: 110,
+                lat: 25.0573,
+                lng: 121.5153,
+                openHour: 17.5,
+                closeHour: 23.5,
+                hoursText: "17:30 - 23:30",
+                rating: 4.5,
+                emoji: "🍚",
+                gradient: "from-amber-500/30 to-orange-600/30",
+                review: "寧夏夜市必吃米其林必比登推介！雞肉飯油香不膩，搭配滷豆腐與燒麻糬超滿足。",
+                mapQuery: "寧夏夜市 方家雞肉飯"
+            },
+            {
                 name: "福州世祖胡椒餅（饒河街夜市總店）",
-                country: "台灣",
-                city: "台北市・松山區",
+                cityGroup: "台北市",
+                district: "台北市・松山區",
                 type: "路邊攤小吃",
                 cuisine: "路邊攤小吃",
                 price: 65,
@@ -242,14 +273,14 @@
                 hoursText: "16:00 - 23:30",
                 rating: 4.4,
                 emoji: "🥟",
-                gradient: "from-amber-500/30 to-orange-600/30",
-                review: "米其林必比登推介路邊攤！炭火貼爐現烤，外皮酥脆充滿芝麻香，蔥肉內餡鮮甜多汁。",
+                gradient: "from-orange-500/30 to-red-600/30",
+                review: "炭火貼爐現烤，外皮酥脆充滿芝麻香，蔥肉內餡鮮甜爆汁，排隊也值得。",
                 mapQuery: "福州世祖胡椒餅 饒河街"
             },
             {
                 name: "鼎泰豐 總店（信義店）",
-                country: "台灣",
-                city: "台北市・大安區",
+                cityGroup: "台北市",
+                district: "台北市・大安區",
                 type: "經典餐廳",
                 cuisine: "台式料理",
                 price: 550,
@@ -261,331 +292,34 @@
                 rating: 4.7,
                 emoji: "🥡",
                 gradient: "from-sky-500/30 to-blue-600/30",
-                review: "黃金 18 摺小籠包皮薄餡多，排骨蛋炒飯與酸辣湯更是必點經典，服務品質極佳。",
+                review: "黃金 18 摺小籠包皮薄餡多，排骨蛋炒飯與酸辣湯更是必點經典。",
                 mapQuery: "鼎泰豐 信義店"
             },
             {
-                name: "阿宗麵線 西門店",
-                country: "台灣",
-                city: "台北市・萬華區",
-                type: "路邊攤小吃",
-                cuisine: "路邊攤小吃",
-                price: 75,
-                lat: 25.0434,
-                lng: 121.5076,
-                openHour: 8.5,
-                closeHour: 22.5,
-                hoursText: "08:30 - 22:30",
-                rating: 4.2,
-                emoji: "🍜",
-                gradient: "from-orange-500/30 to-red-600/30",
-                review: "西門町排隊名店，柴魚湯頭濃郁滑順，滷大腸入味無腥味，加上特製辣椒醬超過癮。",
-                mapQuery: "阿宗麵線 西門町"
-            },
-            {
-                name: "一蘭拉麵 澀谷店",
-                country: "日本",
-                city: "東京・澀谷區",
-                type: "特色餐館",
-                cuisine: "日式料理",
-                price: 260,
-                lat: 35.6612,
-                lng: 139.7013,
-                openHour: 0,
-                closeHour: 24,
-                hoursText: "24 小時營業",
-                rating: 4.5,
+                name: "永康牛肉麵館",
+                cityGroup: "台北市",
+                district: "台北市・大安區",
+                type: "在地餐館",
+                cuisine: "台式料理",
+                price: 300,
+                lat: 25.0326,
+                lng: 121.5293,
+                openHour: 11,
+                closeHour: 20.5,
+                hoursText: "11:00 - 20:30",
+                rating: 4.3,
                 emoji: "🍜",
                 gradient: "from-rose-500/30 to-red-600/30",
-                review: "濃郁天然豚骨湯頭搭配赤紅秘製醬汁，24 小時營業讓深夜逛街後也能隨時吃到的溫暖美味。",
-                mapQuery: "一蘭 渋谷店"
+                review: "紅燒湯頭濃郁微辣、半筋半肉燉得軟嫩入味，再配一盤粉蒸排骨超道地。",
+                mapQuery: "永康牛肉麵"
             },
             {
-                name: "築地場外市場 壽司大 / 海鮮丼",
-                country: "日本",
-                city: "東京・中央區",
-                type: "特色餐館",
-                cuisine: "日式料理",
-                price: 650,
-                lat: 35.6655,
-                lng: 139.7707,
-                openHour: 6,
-                closeHour: 14.5,
-                hoursText: "06:00 - 14:30",
-                rating: 4.7,
-                emoji: "🍣",
-                gradient: "from-cyan-500/30 to-blue-600/30",
-                review: "每日清晨漁港直送海膽、鮭魚卵與黑鮪魚大腹，鮮甜度滿分，建議中午前前往。",
-                mapQuery: "築地場外市場 海鮮丼"
-            },
-            {
-                name: "廣藏市場 順熙家綠豆煎餅 & 麻藥飯捲",
-                country: "韓國",
-                city: "首爾・鐘路區",
+                name: "油庫口蚵仔麵線 + 炭烤香腸",
+                cityGroup: "新北市",
+                district: "新北市・板橋區",
                 type: "路邊攤小吃",
-                cuisine: "韓式料理",
-                price: 150,
-                lat: 37.5700,
-                lng: 126.9990,
-                openHour: 9,
-                closeHour: 21,
-                hoursText: "09:00 - 21:00",
-                rating: 4.4,
-                emoji: "🍙",
-                gradient: "from-emerald-500/30 to-teal-600/30",
-                review: "現磨綠豆現煎的金黃煎餅酥脆可口，搭配特製黃芥末紫菜飯捲與魚板湯超道地。",
-                mapQuery: "광장시장 순희네빈대떡"
-            },
-            {
-                name: "勝利紀念碑 傳統泰式船麵 (Baan Kuay Tiew Ruathong)",
-                country: "泰國",
-                city: "曼谷・拉差貼威",
-                type: "在地餐館",
-                cuisine: "泰式料理",
-                price: 90,
-                lat: 13.7634,
-                lng: 100.5372,
-                openHour: 9,
-                closeHour: 20,
-                hoursText: "09:00 - 20:00",
-                rating: 4.5,
-                emoji: "🍲",
-                gradient: "from-purple-500/30 to-pink-600/30",
-                review: "每碗銅板價，湯頭酸辣濃郁帶勁，一次疊十幾碗超過癮，還會附贈炸豬皮搭配。",
-                mapQuery: "Baan Kuay Tiew Ruathong Bangkok"
-            },
-            {
-                name: "Trattoria Da Enzo al 29",
-                country: "義大利",
-                city: "羅馬・特拉斯提弗列",
-                type: "經典餐廳",
-                cuisine: "義式餐館",
-                price: 680,
-                lat: 41.8880,
-                lng: 12.4777,
-                openHour: 12,
-                closeHour: 23,
-                hoursText: "12:00 - 23:00",
-                rating: 4.7,
-                emoji: "🍝",
-                gradient: "from-indigo-500/30 to-purple-600/30",
-                review: "羅馬最受歡迎的道地小館，培根蛋黃麵 Carbonara 起司與黑胡椒香氣濃郁，提拉米蘇必點。",
-                mapQuery: "Trattoria Da Enzo al 29 Rome"
-            }
-        ];
-
-        const countryEl = document.getElementById('filter-country');
-        const cuisineEl = document.getElementById('filter-cuisine');
-        const budgetEl = document.getElementById('filter-budget');
-        const sortEl = document.getElementById('filter-sort');
-        const gridEl = document.getElementById('food-grid');
-        const countEl = document.getElementById('result-count');
-        const resetBtn = document.getElementById('reset-btn');
-        const locateBtn = document.getElementById('locate-btn');
-        const gpsStatus = document.getElementById('gps-status');
-        const gmapIframe = document.getElementById('gmap-iframe');
-        const mapCurrentTarget = document.getElementById('map-current-target');
-        const mapExternalLink = document.getElementById('map-external-link');
-
-        // 切換下方內嵌的真實 Google Map 視窗
-        function focusOnGoogleMap(query) {
-            const encoded = encodeURIComponent(query);
-            gmapIframe.src = `https://maps.google.com/maps?q=${encoded}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-            mapCurrentTarget.textContent = query;
-            mapExternalLink.href = `https://www.google.com/maps/search/?api=1&query=${encoded}`;
-            gmapIframe.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // 透過真實 GPS + OpenStreetMap Overpass API 抓取真實附近店家
-        locateBtn.addEventListener('click', () => {
-            if (!navigator.geolocation) {
-                alert('您的瀏覽器不支援 GPS 定位功能。');
-                return;
-            }
-            locateBtn.disabled = true;
-            locateBtn.innerHTML = '<span>⏳</span> 正在定位並抓取附近真實店家...';
-
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                userLat = pos.coords.latitude;
-                userLng = pos.coords.longitude;
-                gpsStatus.textContent = `📡 已取得真實定位 (${userLat.toFixed(4)}, ${userLng.toFixed(4)})`;
-
-                // 同步更新內嵌 Google Map 到你的真實位置
-                focusOnGoogleMap(`${userLat},${userLng} 餐廳`);
-
-                try {
-                    // 查詢方圓 1200 公尺內真實的餐廳、小吃店、咖啡廳
-                    const overpassQuery = `
-                        [out:json][timeout:15];
-                        (
-                          node["amenity"~"restaurant|fast_food|cafe"](around:1200,${userLat},${userLng});
-                        );
-                        out body 12;
-                    `;
-                    const res = await fetch('https://overpass-api.de/api/interpreter', {
-                        method: 'POST',
-                        body: overpassQuery
-                    });
-                    const data = await res.json();
-
-                    if (data.elements && data.elements.length > 0) {
-                        const nearbyPlaces = data.elements
-                            .filter(el => el.tags && el.tags.name)
-                            .map(el => {
-                                const isCafe = el.tags.amenity === 'cafe';
-                                const isFastFood = el.tags.amenity === 'fast_food';
-                                return {
-                                    name: el.tags.name,
-                                    country: "附近真實搜尋",
-                                    city: el.tags['addr:district'] || "目前定位周邊",
-                                    type: isCafe ? "咖啡甜點" : (isFastFood ? "路邊攤小吃" : "在地餐館"),
-                                    cuisine: isCafe ? "咖啡甜點" : (isFastFood ? "路邊攤小吃" : "台式料理"),
-                                    price: isFastFood ? 120 : (isCafe ? 180 : 320),
-                                    lat: el.lat,
-                                    lng: el.lon,
-                                    openHour: 10,
-                                    closeHour: 21.5,
-                                    hoursText: el.tags.opening_hours || "10:00 - 21:30 (點擊看 Google 即時時間)",
-                                    rating: (4.1 + (el.id % 8) * 0.1).toFixed(1),
-                                    emoji: isCafe ? "☕" : (isFastFood ? "🥡" : "🍽️"),
-                                    gradient: "from-emerald-500/30 to-sky-600/30",
-                                    review: `位於你目前位置附近真實登記的店家，點擊下方按鈕可查看 Google Maps 最新食記照片與顧客評論！`,
-                                    mapQuery: `${el.tags.name} ${el.lat},${el.lon}`
-                                };
-                            });
-
-                        // 清除舊的附近資料並插入最新真實店家
-                        foodData = foodData.filter(item => item.country !== "附近真實搜尋");
-                        foodData = [...nearbyPlaces, ...foodData];
-
-                        const nearbyOpt = document.getElementById('nearby-option');
-                        nearbyOpt.classList.remove('hidden');
-                        countryEl.value = '附近真實搜尋';
-                        sortEl.value = 'distance';
-                    }
-                } catch (err) {
-                    console.error('Overpass API error:', err);
-                }
-
-                locateBtn.disabled = false;
-                locateBtn.innerHTML = '<span>✅</span> 已更新附近真實店家';
-                renderFood();
-            }, () => {
-                alert('無法取得定位權限，將繼續使用台北市預設位置計算距離。');
-                locateBtn.disabled = false;
-                locateBtn.innerHTML = '<span>📡</span> 抓取我附近的真實餐廳 (GPS)';
-            });
-        });
-
-        function renderFood() {
-            const country = countryEl.value;
-            const cuisine = cuisineEl.value;
-            const budget = budgetEl.value ? parseFloat(budgetEl.value) : Infinity;
-            const sort = sortEl.value;
-
-            // 即時計算距離與營業狀態
-            const enriched = foodData.map(item => ({
-                ...item,
-                distanceKm: calcDistanceKm(userLat, userLng, item.lat, item.lng),
-                isOpen: checkIsOpenNow(item.openHour, item.closeHour)
-            }));
-
-            let filtered = enriched.filter(item => {
-                const matchCountry = country === 'all' || item.country === country;
-                const matchCuisine = cuisine === 'all' || item.cuisine === cuisine;
-                const matchBudget = item.price <= budget;
-                const matchOpen = sort === 'open' ? item.isOpen : true;
-                return matchCountry && matchCuisine && matchBudget && matchOpen;
-            });
-
-            if (sort === 'distance') {
-                filtered.sort((a, b) => a.distanceKm - b.distanceKm);
-            } else if (sort === 'price-asc') {
-                filtered.sort((a, b) => a.price - b.price);
-            }
-
-            // 更新預算提示文字
-            if (budget !== Infinity) {
-                countEl.innerHTML = `以單餐預算 <strong class="text-pink-300">NT$ ${budget}</strong> 計算，共為你找到 <strong class="text-sky-300">${filtered.length}</strong> 間可負擔的真實美食！`;
-            } else {
-                countEl.innerHTML = `共顯示 <strong class="text-sky-300">${filtered.length}</strong> 間真實餐廳與路邊攤（已依你的系統時間判定營業狀態）`;
-            }
-
-            if (filtered.length === 0) {
-                gridEl.innerHTML = `
-                    <div class="col-span-full glass-card rounded-2xl p-10 text-center space-y-2">
-                        <p class="text-lg font-semibold text-slate-200">找不到符合條件的美食 😢</p>
-                        <p class="text-sm text-slate-400">試著提高單餐預算或切換其他國家與菜系看看吧！</p>
-                    </div>`;
-                return;
-            }
-
-            gridEl.innerHTML = filtered.map(item => {
-                const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mapQuery)}`;
-                const safeQuery = item.mapQuery.replace(/'/g, "\\'");
-                return `
-                <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between transition-all hover:-translate-y-1 hover:border-sky-400/50">
-                    <div>
-                        <!-- 食物圖文視覺區 -->
-                        <div class="h-36 bg-gradient-to-br ${item.gradient} flex items-center justify-between px-6 relative border-b border-white/10">
-                            <span class="text-6xl drop-shadow-lg">${item.emoji}</span>
-                            <div class="text-right space-y-1.5">
-                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${item.isOpen ? 'bg-emerald-500/30 text-emerald-200 border border-emerald-400/40' : 'bg-rose-500/30 text-rose-200 border border-rose-400/40'}">
-                                    ${item.isOpen ? '🟢 目前營業中' : '🔴 目前休息中'}
-                                </span>
-                                <div class="text-xs text-slate-200 font-medium bg-slate-900/60 px-2.5 py-1 rounded-lg">
-                                    📍 距離 ${item.distanceKm} km
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 餐廳資訊 -->
-                        <div class="p-5 space-y-3">
-                            <div class="flex items-start justify-between gap-2">
-                                <div>
-                                    <span class="text-[11px] text-sky-300 font-medium">${item.country} · ${item.city} · ${item.type}</span>
-                                    <h3 class="text-lg font-bold text-white mt-0.5">${item.name}</h3>
-                                </div>
-                                <span class="text-xs font-bold text-amber-300 bg-amber-500/20 px-2 py-1 rounded-lg border border-amber-400/30 flex-shrink-0">
-                                    ★ ${item.rating}
-                                </span>
-                            </div>
-
-                            <p class="text-xs text-slate-300 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/10">
-                                💬 「${item.review}」
-                            </p>
-
-                            <!-- Google Maps 真實圖文評論與地圖定位按鈕 -->
-                            <div class="flex items-center gap-2 pt-1">
-                                <button type="button" onclick="focusOnGoogleMap('${safeQuery}')" class="flex-1 py-2 px-3 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/30 text-xs font-semibold transition cursor-pointer">
-                                    🗺️ 在上方地圖預覽
-                                </button>
-                                <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 rounded-xl bg-pink-500/20 hover:bg-pink-500/30 text-pink-200 border border-pink-400/30 text-xs font-semibold text-center transition">
-                                    📸 Google 圖文評論
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 底部時間與價格 -->
-                    <div class="px-5 py-3.5 bg-slate-950/30 border-t border-white/10 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">🕒 ${item.hoursText}</span>
-                        <span class="font-bold text-pink-300 text-sm">均消 NT$ ${item.price}</span>
-                    </div>
-                </article>
-            `}).join('');
-        }
-
-        [countryEl, cuisineEl, budgetEl, sortEl].forEach(el => el.addEventListener('input', renderFood));
-        resetBtn.addEventListener('click', () => {
-            countryEl.value = 'all';
-            cuisineEl.value = 'all';
-            budgetEl.value = '';
-            sortEl.value = 'distance';
-            renderFood();
-        });
-
-        renderFood();
-    </script>
-</body>
-</html>
+                cuisine: "路邊攤小吃",
+                price: 95,
+                lat: 25.0229,
+                lng: 121.4667,
+                openHour: 9.5
