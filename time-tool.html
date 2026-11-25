@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>時間安排計時及轉換器｜Hanhan Chen</title>
+  <meta name="description" content="整合倒數計時、時間安排、時區換算與世界時鐘，快速掌握不同城市的現在時間。">
+  <meta name="author" content="陳莙涵 Hanhan Chen">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="canonical" href="https://hanhanchen-meloha.github.io/-web/time-tool.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hanhanchen-meloha.github.io/-web/time-tool.html">
+  <meta property="og:title" content="時間安排計時及轉換器｜Hanhan Chen">
+  <meta property="og:description" content="整合倒數計時、時間安排、時區換算與世界時鐘，快速掌握不同城市的現在時間。">
+  <meta property="og:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="時間安排計時及轉換器｜Hanhan Chen">
+  <meta name="twitter:description" content="整合倒數計時、時間安排、時區換算與世界時鐘，快速掌握不同城市的現在時間。">
+  <meta name="twitter:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6XSMN2F0PK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6XSMN2F0PK');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#0f172a;--panel:rgba(255,255,255,.09);--line:rgba(255,255,255,.14);--muted:#a8b4c7;--cyan:#67e8f9;--purple:#c4b5fd}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:Inter,"Noto Sans TC",sans-serif;color:#f8fafc;background:radial-gradient(at 10% 10%,rgba(14,165,233,.25),transparent 42%),radial-gradient(at 90% 80%,rgba(139,92,246,.22),transparent 45%),#0f172a}
+    a{color:inherit}.top{max-width:1120px;margin:auto;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .brand{font-weight:800;letter-spacing:.04em;background:linear-gradient(90deg,#67e8f9,#c4b5fd,#f9a8d4);color:transparent;background-clip:text;text-decoration:none}
+    .home{padding:10px 16px;border:1px solid var(--line);border-radius:14px;text-decoration:none;background:rgba(255,255,255,.08);font-size:14px}
+    main{max-width:1120px;margin:34px auto 80px;padding:0 24px}.hero{text-align:center;margin:44px 0 34px}.eyebrow{color:var(--cyan);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+    h1{font-size:clamp(30px,5vw,48px);margin:12px 0}.intro{color:var(--muted);line-height:1.8;margin:0 auto;max-width:650px}
+    .tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:28px 0}.tab{border:1px solid var(--line);background:rgba(255,255,255,.06);color:#dbeafe;padding:11px 18px;border-radius:999px;cursor:pointer;font:inherit}.tab.active{background:linear-gradient(100deg,#0891b2,#7c3aed);border-color:transparent;color:white}
+    .panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:clamp(20px,4vw,34px);backdrop-filter:blur(16px);box-shadow:0 18px 55px rgba(0,0,0,.18)}.panel.active{display:block}
+    h2{font-size:22px;margin:0 0 8px}.sub{color:var(--muted);font-size:14px;margin:0 0 24px;line-height:1.7}
+    .timer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:620px;margin:25px auto}
+    label{display:block;color:#cbd5e1;font-size:13px;margin-bottom:8px}input,select{width:100%;background:rgba(15,23,42,.72);color:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit;min-width:0}input:focus,select:focus{outline:2px solid #67e8f9;outline-offset:2px}
+    .display{font-size:clamp(44px,9vw,76px);font-weight:800;letter-spacing:.04em;text-align:center;font-variant-numeric:tabular-nums;margin:20px 0;color:#fff;text-shadow:0 0 28px rgba(103,232,249,.25)}
+    .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}.btn{border:0;border-radius:12px;padding:12px 20px;font:600 14px Inter,"Noto Sans TC",sans-serif;cursor:pointer;background:linear-gradient(100deg,#0891b2,#7c3aed);color:white}.btn.secondary{background:rgba(255,255,255,.1);border:1px solid var(--line)}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .status{text-align:center;color:var(--muted);min-height:24px;margin-top:16px;font-size:14px}
+    .convert-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.result{margin-top:20px;padding:18px;border:1px solid rgba(103,232,249,.25);border-radius:16px;background:rgba(8,145,178,.1);line-height:1.8}
+    .world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.city{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.35)}.city-name{font-weight:700}.city-zone{color:var(--muted);font-size:12px;margin-top:4px}.city-time{font-size:27px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:14px}.city-date{color:#cbd5e1;font-size:13px;margin-top:4px}
+    footer{text-align:center;color:#94a3b8;font-size:12px;padding:30px 20px;border-top:1px solid rgba(255,255,255,.08)}
+    @media(max-width:620px){.top{padding:18px}.convert-grid{grid-template-columns:1fr}.timer-grid{gap:9px}main{padding:0 16px;margin-top:12px}.hero{margin-top:32px}.home{white-space:nowrap}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="https://hanhanchen-meloha.github.io/-web/">HANHAN CHEN</a>
+    <a class="home" href="https://hanhanchen-meloha.github.io/-web/">← 回首頁</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">TIME PLANNER & WORLD CLOCK</div>
+      <h1>時間安排計時及轉換器</h1>
+      <p class="intro">安排一段專注時間、換算不同城市的時區，或快速查看世界各地現在幾點。所有時間會依照你選擇的時區即時更新。</p>
+    </section>
+
+    <nav class="tabs" aria-label="工具切換">
+      <button class="tab active" data-tab="timer">⏳ 倒數計時</button>
+      <button class="tab" data-tab="convert">🌐 時區轉換</button>
+      <button class="tab" data-tab="world">🕒 世界時鐘</button>
+    </nav>
+
+    <section class="panel active" id="timer">
+      <h2>倒數計時器</h2><p class="sub">設定時、分、秒，開始你的讀書、工作或休息時段。</p>
+      <div class="timer-grid">
+        <div><label for="hours">小時</label><input id="hours" type="number" min="0" max="99" value="0"></div>
+        <div><label for="minutes">分鐘</label><input id="minutes" type="number" min="0" max="59" value="5"></div>
+        <div><label for="seconds">秒數</label><input id="seconds" type="number" min="0" max="59" value="0"></div>
+      </div>
+      <div class="display" id="timerDisplay" aria-live="polite">05:00</div>
+      <div class="actions">
+        <button class="btn" id="startTimer">開始計時</button>
+        <button class="btn secondary" id="pauseTimer" disabled>暫停</button>
+        <button class="btn secondary" id="resetTimer">重新設定</button>
+      </div>
+      <p class="status" id="timerStatus" role="status">準備就緒</p>
+    </section>
+
+    <section class="panel" id="convert">
+      <h2>時區轉換器</h2><p class="sub">輸入出發地的日期與時間，再選擇目的地時區，即可換算當地時間。</p>
+      <div class="convert-grid">
+        <div><label for="sourceZone">原始時區</label><select id="sourceZone"></select></div>
+        <div><label for="targetZone">轉換至</label><select id="targetZone"></select></div>
+        <div><label for="sourceDate">日期與時間</label><input id="sourceDate" type="datetime-local"></div>
+      </div>
+      <div class="actions" style="justify-content:flex-start;margin-top:20px"><button class="btn" id="convertBtn">轉換時間</button><button class="btn secondary" id="nowBtn">使用現在時間</button></div>
+      <div class="result" id="convertResult" aria-live="polite">選擇時區與日期時間後，按下「轉換時間」。</div>
+    </section>
+
+    <section class="panel" id="world">
+      <h2>世界時鐘</h2><p class="sub">即時查看不同城市的當地時間，時間每秒自動更新。</p>
+      <div class="world-grid" id="worldClocks"></div>
+    </section>
+  </main>
+
+  <footer>© 2026 Hanhan Chen · 時間安排計時及轉換器</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === btn));
+      document.querySelectorAll('.panel').forEach(x => x.classList.toggle('active', x.id === btn.dataset.tab));
+    }));
+
+    // Countdown timer
+    let remaining = 300, timerId = null, endAt = 0;
+    const pad = n => String(n).padStart(2,'0');
+    function renderTimer(){
+      const h=Math.floor(remaining/3600), m=Math.floor((remaining%3600)/60), s=remaining%60;
+      $('timerDisplay').textContent = h ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+    }
+    function readDuration(){
+      const h=Math.max(0,Math.min(99,Number($('hours').value)||0));
+      const m=Math.max(0,Math.min(59,Number($('minutes').value)||0));
+      const s=Math.max(0,Math.min(59,Number($('seconds').value)||0));
+      return h*3600+m*60+s;
+    }
+    function stopTimer(){ if(timerId){clearInterval(timerId);timerId=null;} }
+    function tick(){
+      remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000)); renderTimer();
+      if(remaining<=0){stopTimer();$('timerStatus').textContent='時間到！這段時段已完成。';$('pauseTimer').disabled=true;$('startTimer').disabled=false;try{ if('Notification' in window && Notification.permission==='granted') new Notification('倒數計時結束'); }catch(e){} }
+    }
+    $('startTimer').addEventListener('click',()=>{
+      if(timerId) return;
+      if(remaining<=0) remaining=readDuration();
+      if(remaining<=0){$('timerStatus').textContent='請先設定大於 0 的時間。';return;}
+      endAt=Date.now()+remaining*1000;timerId=setInterval(tick,200);
+      $('timerStatus').textContent='計時中…';$('pauseTimer').disabled=false;$('startTimer').disabled=true;
+      if('Notification' in window && Notification.permission==='default') Notification.requestPermission().catch(()=>{});
+    });
+    $('pauseTimer').addEventListener('click',()=>{stopTimer();$('timerStatus').textContent='已暫停';$('pauseTimer').disabled=true;$('startTimer').disabled=false;});
+    $('resetTimer').addEventListener('click',()=>{stopTimer();remaining=readDuration();renderTimer();$('timerStatus').textContent='已重新設定';$('pauseTimer').disabled=true;$('startTimer').disabled=false;});
+    ['hours','minutes','seconds'].forEach(id=>$(id).addEventListener('change',()=>{if(!timerId){remaining=readDuration();renderTimer();}}));
+    renderTimer();
+
+    // Time zone converter
+    const zones = [
+      ['台北 Taipei','Asia/Taipei'],['東京 Tokyo','Asia/Tokyo'],['首爾 Seoul','Asia/Seoul'],
+      ['香港 Hong Kong','Asia/Hong_Kong'],['新加坡 Singapore','Asia/Singapore'],['曼谷 Bangkok','Asia/Bangkok'],
+      ['雪梨 Sydney','Australia/Sydney'],['奧克蘭 Auckland','Pacific/Auckland'],['杜拜 Dubai','Asia/Dubai'],
+      ['倫敦 London','Europe/London'],['巴黎 Paris','Europe/Paris'],['紐約 New York','America/New_York'],
+      ['洛杉磯 Los Angeles','America/Los_Angeles'],['溫哥華 Vancouver','America/Vancouver'],['UTC 世界協調時間','UTC']
+    ];
+    function fillZones(){
+      zones.forEach(([name,zone])=>{['sourceZone','targetZone'].forEach(id=>{const o=document.createElement('option');o.value=zone;o.textContent=name;$(id).appendChild(o);});});
+      $('sourceZone').value=Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Taipei';
+      if(!zones.some(z=>z[1]===$('sourceZone').value)){const o=document.createElement('option');o.value=$('sourceZone').value;o.textContent=$('sourceZone').value;$('sourceZone').appendChild(o);}
+      $('targetZone').value='America/New_York';
+    }
+    function localInputValue(date=new Date()){
+      const p=n=>String(n).padStart(2,'0');
+      return `${date.getFullYear()}-${p(date.getMonth()+1)}-${p(date.getDate())}T${p(date.getHours())}:${p(date.getMinutes())}`;
+    }
+    function convertTime(){
+      const value=$('sourceDate').value;
+      if(!value){$('convertResult').textContent='請先選擇日期與時間。';return;}
+      const zone=$('sourceZone').value, target=$('targetZone').value;
+      const [d,t]=value.split('T'),[y,mo,day]=d.split('-').map(Number),[hh,mm]=t.split(':').map(Number);
+      // Interpret the entered wall-clock time in the source zone, including DST.
+      function zonedDateTimeToUTC(y,mo,day,hh,mm,timeZone){
+        let guess=Date.UTC(y,mo-1,day,hh,mm);
+        for(let i=0;i<4;i++){
+          const parts=new Intl.DateTimeFormat('en-CA',{timeZone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(guess));
+          const v={};parts.forEach(p=>{if(p.type!=='literal')v[p.type]=Number(p.value)});
+          const represented=Date.UTC(v.year,v.month-1,v.day,v.hour,v.minute);
+          const wanted=Date.UTC(y,mo-1,day,hh,mm);
+          guess += wanted-represented;
+        }
+        return new Date(guess);
+      }
+      const instant=zonedDateTimeToUTC(y,mo,day,hh,mm,zone);
+      const fmt=(tz)=>new Intl.DateTimeFormat('zh-TW',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',weekday:'long',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZoneName:'short'}).format(instant);
+      $('convertResult').innerHTML=`<strong>${zone}</strong><br>${fmt(zone)}<hr style="border:0;border-top:1px solid rgba(255,255,255,.15);margin:12px 0"><strong>轉換後 · ${target}</strong><br><span style="font-size:20px;color:#67e8f9;font-weight:700">${fmt(target)}</span>`;
+    }
+    fillZones();$('sourceDate').value=localInputValue();$('convertBtn').addEventListener('click',convertTime);
+    $('nowBtn').addEventListener('click',()=>{$('sourceDate').value=localInputValue();convertTime();});
+    $('sourceZone').addEventListener('change',convertTime);$('targetZone').addEventListener('change',convertTime);
+
+    // World clock
+    const cities=[['台北','Asia/Taipei'],['東京','Asia/Tokyo'],['新加坡','Asia/Singapore'],['雪梨','Australia/Sydney'],['倫敦','Europe/London'],['巴黎','Europe/Paris'],['紐約','America/New_York'],['洛杉磯','America/Los_Angeles']];
+    function updateWorldClocks(){
+      $('worldClocks').innerHTML=cities.map(([city,zone])=>{
+        const time=new Intl.DateTimeFormat('zh-TW',{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date());
+        const date=new Intl.DateTimeFormat('zh-TW',{timeZone:zone,year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(new Date());
+        return `<article class="city"><div class="city-name">${city}</div><div class="city-zone">${zone}</div><div class="city-time">${time}</div><div class="city-date">${date}</div></article>`;
+      }).join('');
+    }
+    updateWorldClocks();setInterval(updateWorldClocks,1000);
+  </script>
+</body>
+</html>
