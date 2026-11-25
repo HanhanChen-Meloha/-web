@@ -27,18 +27,19 @@
     <meta name="twitter:description" content="我是陳莙涵，大同數媒系四年級，專注於遊戲設計、動畫製作與個人創作接案。">
     <meta name="twitter:image" content="https://hanhanchen-meloha.github.io/-web/og.jpg">
 
-    <!-- Favicon 瀏覽器分頁與手機主畫面圖示 -->
-    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Favicon 瀏覽器分頁與手機主畫面圖示 (32x32 SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b6b77' stroke='%23cbd5e1' stroke-width='1.5'/%3E%3Cpath d='M5 7h10v18H5z' fill='%23b5945b'/%3E%3Cpath d='M8 9h4v14H8z' fill='%23ffffff'/%3E%3Ctext x='16' y='21' font-family='Arial,sans-serif' font-weight='bold' font-size='10' fill='%23ffffff'%3EHC%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="favicon.png">
 
-    <!-- Google Analytics 4 (GA) 模擬追蹤碼 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Google Analytics 4 (GA) 追蹤碼 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6XSMN2F0PK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
+      gtag('config', 'G-6XSMN2F0PK');
     </script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter & Noto Sans TC -->
@@ -90,7 +91,7 @@
                     News
                 </a>
                 <a href="#tools" class="hover:text-sky-400 transition-colors flex items-center gap-1.5">
-                    Tools <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-1.5 py-0.5 rounded-full">Coming soon</span>
+                    Tools <span class="text-[10px] bg-sky-500/30 border border-sky-400/30 text-sky-300 px-1.5 py-0.5 rounded-full">New</span>
                 </a>
                 <a href="#games" class="hover:text-sky-400 transition-colors flex items-center gap-1.5">
                     Games <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-1.5 py-0.5 rounded-full">Coming soon</span>
@@ -119,7 +120,7 @@
                 News
             </a>
             <a href="#tools" class="block py-2 hover:text-sky-400 transition-colors flex justify-between items-center">
-                Tools <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-1.5 py-0.5 rounded-full">Coming soon</span>
+                Tools <span class="text-[10px] bg-sky-500/30 border border-sky-400/30 text-sky-300 px-1.5 py-0.5 rounded-full">New</span>
             </a>
             <a href="#games" class="block py-2 hover:text-sky-400 transition-colors flex justify-between items-center">
                 Games <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-1.5 py-0.5 rounded-full">Coming soon</span>
@@ -150,8 +151,8 @@
                 <a href="https://hanhanchen-meloha.github.io/-web/rps.html" target="_blank" rel="noopener noreferrer" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-sky-500 hover:from-pink-400 hover:to-sky-400 text-white font-semibold shadow-lg shadow-pink-500/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
                     <span>🎮 玩我的小遊戲</span>
                 </a>
-                <a href="#contact" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-medium shadow-lg shadow-sky-500/25 transition-all transform hover:-translate-y-0.5">
-                    立即聯絡我
+                <a href="#tools" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-medium shadow-lg shadow-sky-500/25 transition-all transform hover:-translate-y-0.5">
+                    探索實用工具
                 </a>
                 <a href="#about" class="px-8 py-3.5 rounded-2xl glass-card hover:bg-white/20 font-medium transition-all">
                     了解更多
@@ -239,14 +240,50 @@
         </div>
     </section>
 
-    <!-- 專長與善用工具 區塊 -->
+    <!-- 專長與善用工具 (Tools) 區塊 -->
     <section id="tools" class="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         <div class="text-center mb-12">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-3">專長與善用工具</h2>
-            <p class="text-slate-400 text-sm sm:text-base">從 Profile 抽出的關鍵字與專業工具</p>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">自製工具與專業技能</h2>
+            <p class="text-slate-400 text-sm sm:text-base">線上互動工具、即時天氣資訊與設計開發專長</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+            <!-- 新增工具卡片 1：世界美食地圖 -->
+            <a href="food-map.html" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-amber-400/50 group block relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        🌍
+                    </div>
+                    <span class="text-[10px] bg-amber-500/30 border border-amber-400/30 text-amber-300 px-2 py-0.5 rounded-full font-semibold">
+                        New Tool
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 group-hover:text-amber-300 transition-colors">世界美食地圖</h3>
+                <p class="text-slate-400 text-sm mb-4">查詢各國餐廳與路邊攤、營業時間與距離，還能依單餐預算精準推薦好料！</p>
+                <div class="text-xs text-amber-400 font-medium inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    立即開啟工具 &rarr;
+                </div>
+            </a>
+
+            <!-- 新增工具卡片 2：圖文設計風格轉換器 -->
+            <a href="style-converter.html" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-purple-400/50 group block relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        🎨
+                    </div>
+                    <span class="text-[10px] bg-purple-500/30 border border-purple-400/30 text-purple-300 px-2 py-0.5 rounded-full font-semibold">
+                        New Tool
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2 group-hover:text-purple-300 transition-colors">圖文設計風格轉換器</h3>
+                <p class="text-slate-400 text-sm mb-4">一鍵將字體與圖片轉換成賽博龐克、8-Bit 像素、典雅雜誌等多種視覺風格並下載！</p>
+                <div class="text-xs text-purple-400 font-medium inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    立即開啟工具 &rarr;
+                </div>
+            </a>
 
             <!-- 天氣預報小卡 -->
             <a href="weather.html" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-sky-400/50 group block relative overflow-hidden">
@@ -268,6 +305,18 @@
                     <span id="home-weather-rain">降雨機率預測中...</span>
                     <span class="text-sky-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 font-medium">詳細預報 &rarr;</span>
                 </div>
+            </a>
+
+            <!-- 卡片 6：線上猜拳遊戲專屬卡片 -->
+            <a href="https://hanhanchen-meloha.github.io/-web/rps.html" target="_blank" rel="noopener noreferrer" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-pink-400/50 group block">
+                <div class="w-12 h-12 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-400 mb-4 font-bold text-xl group-hover:scale-110 transition-transform">
+                    🎮
+                </div>
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-lg font-semibold group-hover:text-pink-300 transition-colors">像素猜拳對決</h3>
+                    <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-2 py-0.5 rounded-full">Hot</span>
+                </div>
+                <p class="text-slate-400 text-sm">2-3人線上實時連線 8-bit 像素風猜拳小遊戲，快來挑戰！</p>
             </a>
 
             <!-- 卡片 1 -->
@@ -333,17 +382,6 @@
                 </div>
             </div>
 
-            <!-- 卡片 6：線上猜拳遊戲專屬卡片 -->
-            <a href="https://hanhanchen-meloha.github.io/-web/rps.html" target="_blank" rel="noopener noreferrer" class="glass-card rounded-2xl p-6 transition-all hover:transform hover:-translate-y-1 hover:border-pink-400/50 group block">
-                <div class="w-12 h-12 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-400 mb-4 font-bold text-xl group-hover:scale-110 transition-transform">
-                    🎮
-                </div>
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold group-hover:text-pink-300 transition-colors">像素猜拳對決</h3>
-                    <span class="text-[10px] bg-pink-500/30 border border-pink-400/30 text-pink-300 px-2 py-0.5 rounded-full">Hot</span>
-                </div>
-                <p class="text-slate-400 text-sm">2-3人線上實時連線 8-bit 像素風猜拳小遊戲，快來挑戰！</p>
-            </a>
         </div>
     </section>
 
